@@ -1,0 +1,406 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Aliyah Course - Assessment 2</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      :root {
+        --bg-start: #f0f8ff;
+        --bg-end: #e6f7ff;
+        --text-color: #2c3e50;
+        --text-muted: #5a6775;
+        --primary-color: #007bff;
+        --card-bg: rgba(255, 255, 255, 0.8);
+        --shadow-color: rgba(44, 62, 80, 0.1);
+        --correct-color: #28a745;
+        --incorrect-color: #dc3545;
+      }
+
+      body {
+        font-family: "Poppins", sans-serif;
+        background: linear-gradient(135deg, var(--bg-start), var(--bg-end));
+        color: var(--text-color);
+        margin: 0;
+        padding: 2rem;
+        display: flex;
+        justify-content: center;
+        align-items: flex-start;
+        min-height: 100vh;
+      }
+
+      .quiz-container {
+        width: 100%;
+        max-width: 900px;
+        background: var(--card-bg);
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
+        border-radius: 20px;
+        padding: 2.5rem;
+        box-shadow: 0 10px 35px var(--shadow-color);
+      }
+
+      .quiz-header {
+        text-align: center;
+        margin-bottom: 2rem;
+        border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+        padding-bottom: 1.5rem;
+      }
+
+      .header-logo {
+        width: 60px;
+        height: auto;
+        margin-bottom: 1rem;
+        opacity: 0.8;
+      }
+
+      .quiz-header h1 {
+        font-size: 2rem;
+        font-weight: 700;
+      }
+
+      .progress-bar {
+        width: 0%;
+        height: 10px;
+        background-color: var(--primary-color);
+        border-radius: 5px;
+        transition: width 0.5s ease;
+      }
+
+      .question-block h2 {
+        font-size: 1.15rem;
+        margin-bottom: 1rem;
+        font-weight: 600;
+      }
+
+      .options-list li {
+        background-color: #fff;
+        margin: 0.5rem 0;
+        padding: 0.9rem 1.2rem;
+        border-radius: 8px;
+        border: 1px solid #ced4da;
+        cursor: pointer;
+        transition: all 0.2s ease;
+      }
+
+      .options-list li:hover {
+        border-color: var(--primary-color);
+        transform: translateY(-2px);
+      }
+
+      .options-list li.selected {
+        background-color: var(--primary-color);
+        border-color: #0056b3;
+        color: #fff;
+      }
+
+      #submit-btn {
+        background: var(--correct-color);
+        color: #fff;
+        padding: 1rem;
+        border-radius: 10px;
+        border: none;
+        width: 100%;
+        margin-top: 2rem;
+        font-size: 1.1rem;
+        cursor: pointer;
+      }
+
+      #submit-btn:disabled {
+        background: #6c757d;
+      }
+
+      .modal-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.5);
+        display: none;
+        justify-content: center;
+        align-items: center;
+      }
+
+      .modal-content {
+        background: #fff;
+        padding: 2rem;
+        border-radius: 16px;
+        width: 90%;
+        max-width: 500px;
+        text-align: center;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="quiz-container">
+      <header class="quiz-header">
+        <img
+          src="http://googleusercontent.com/file_content/11"
+          alt="Course Logo"
+          class="header-logo"
+        />
+        <h1>Assessment 2</h1>
+        <div
+          style="
+            width: 100%;
+            background-color: #e9ecef;
+            border-radius: 5px;
+            margin-top: 1rem;
+          "
+        >
+          <div class="progress-bar" id="progress-bar"></div>
+        </div>
+      </header>
+
+      <form id="quiz-form">
+        <div id="questions-wrapper"></div>
+        <button type="submit" id="submit-btn" disabled>
+          Submit Assessment
+        </button>
+      </form>
+    </div>
+
+    <div id="results-modal" class="modal-overlay">
+      <div class="modal-content">
+        <h2 id="grade-level"></h2>
+        <p id="feedback-text"></p>
+        <button onclick="location.href='lecture2.html'">
+          Return to Lecture
+        </button>
+      </div>
+    </div>
+
+    <script>
+      const quizQuestions = [
+        {
+          question:
+            "What is inseparably linked to God's plan of redemption for humanity?",
+          options: [
+            "The geography of the Middle East",
+            "The history and destiny of Israel",
+            "The rise of modern nations",
+            "The development of religious philosophy",
+          ],
+          answer: 1,
+        },
+        {
+          question:
+            "What are the three key promises God makes to Abraham in the Abrahamic Covenant?",
+          options: [
+            "Wealth, power, and fame",
+            "Wisdom, knowledge, and understanding",
+            "Land, descendants, and blessing",
+            "Health, long life, and happiness",
+          ],
+          answer: 2,
+        },
+        {
+          question:
+            "The fulfillment of the Abrahamic Covenant is dependent on what?",
+          options: [
+            "Abraham's performance and obedience",
+            "The support of surrounding nations",
+            "God's faithfulness",
+            "The changing political landscape",
+          ],
+          answer: 2,
+        },
+        {
+          question:
+            "According to Exodus 19:5-6, Israel is called to be a special treasure to God and a:",
+          options: [
+            "Kingdom of warriors and a mighty nation",
+            "Kingdom of priests and a holy nation",
+            "Kingdom of scholars and a wise nation",
+            "Kingdom of merchants and a prosperous nation",
+          ],
+          answer: 1,
+        },
+        {
+          question:
+            "What is described as Israel's primary calling as a 'light to the nations'?",
+          options: [
+            "To conquer other lands",
+            "To be a living witness to the one true God",
+            "To build the largest temple",
+            "To create a global economy",
+          ],
+          answer: 1,
+        },
+        {
+          question:
+            "What does the text say is the ultimate result of Israel repeatedly breaking God's covenant?",
+          options: [
+            "Immediate forgiveness",
+            "The covenant being nullified",
+            "Exile from the land",
+            "The loss of their identity",
+          ],
+          answer: 2,
+        },
+        {
+          question:
+            "The prophets foretold a restoration for Israel that was not just physical, but also:",
+          options: ["Political", "Economical", "Spiritual", "Military"],
+          answer: 2,
+        },
+        {
+          question:
+            "In Romans 11, what did Israel's temporary hardening lead to?",
+          options: [
+            "The end of the covenant",
+            "The gospel being extended to the Gentiles",
+            "The destruction of Jerusalem",
+            "The loss of all promises",
+          ],
+          answer: 1,
+        },
+        {
+          question:
+            "Paul argues that Israel's future restoration will lead to what for the world?",
+          options: [
+            "Greater political turmoil",
+            "Economic collapse",
+            "Even greater riches, like 'life from the dead'",
+            "A new set of laws",
+          ],
+          answer: 2,
+        },
+        {
+          question:
+            "What did Jesus affirm when He declared 'salvation is of the Jews'?",
+          options: [
+            "That salvation was only for Jewish people",
+            "The ongoing validity of God's promises to Israel",
+            "A new political movement",
+            "The end of the old covenants",
+          ],
+          answer: 1,
+        },
+        {
+          question:
+            "What is the main point of Romans chapters 9-11 regarding Israel?",
+          options: [
+            "That the Church has completely replaced Israel",
+            "That God's promises to Israel are irrevocable",
+            "That Israel's role is finished",
+            "That Gentiles are superior to Jews",
+          ],
+          answer: 1,
+        },
+        {
+          question:
+            "The book of Revelation portrays what group being sealed from the twelve tribes of Israel?",
+          options: [
+            "12,000 priests",
+            "7,000 prophets",
+            "144,000 people",
+            "All the elders of Israel",
+          ],
+          answer: 2,
+        },
+        {
+          question:
+            "How does the New Testament relate the Church to Israel's covenant blessings?",
+          options: [
+            "The Church supersedes and eliminates Israel",
+            "The Church is grafted into the blessings",
+            "The Church and Israel have separate, unrelated blessings",
+            "The Church's blessings are superior",
+          ],
+          answer: 1,
+        },
+        {
+          question:
+            "What is the modern-day return of the Jewish people to their homeland called?",
+          options: ["The Exodus", "The Diaspora", "Aliyah", "The Great Return"],
+          answer: 2,
+        },
+        {
+          question:
+            "What are Christians called to do in response to God's ongoing work in Israel?",
+          options: [
+            "Remain neutral and observe",
+            "Oppose the political state of Israel",
+            "Pray for Jerusalem and support the gathering of His people",
+            "Focus only on the Church's growth",
+          ],
+          answer: 2,
+        },
+      ];
+
+      // --- The rest of the quiz logic remains the same ---
+      const questionsWrapper = document.getElementById("questions-wrapper");
+      const quizForm = document.getElementById("quiz-form");
+      const submitBtn = document.getElementById("submit-btn");
+      const progressBar = document.getElementById("progress-bar");
+      const resultsModal = document.getElementById("results-modal");
+      const gradeLevelEl = document.getElementById("grade-level");
+      const feedbackTextEl = document.getElementById("feedback-text");
+      let userAnswers = new Array(quizQuestions.length).fill(null);
+
+      function renderQuestions() {
+        let questionsHTML = "";
+        quizQuestions.forEach((q, index) => {
+          questionsHTML += `<div class="question-block"><h2>${index + 1}. ${
+            q.question
+          }</h2><ul class="options-list" data-question-index="${index}">${q.options
+            .map((opt, i) => `<li data-option-index="${i}">${opt}</li>`)
+            .join("")}</ul></div>`;
+        });
+        questionsWrapper.innerHTML = questionsHTML;
+      }
+
+      function handleOptionSelect(e) {
+        if (!e.target.matches("li")) return;
+        const questionIndex = e.target.parentElement.dataset.questionIndex;
+        const optionIndex = e.target.dataset.optionIndex;
+        userAnswers[questionIndex] = parseInt(optionIndex);
+        const options = e.target.parentElement.querySelectorAll("li");
+        options.forEach((opt) => opt.classList.remove("selected"));
+        e.target.classList.add("selected");
+        updateProgress();
+      }
+
+      function updateProgress() {
+        const answeredCount = userAnswers.filter((a) => a !== null).length;
+        const progress = (answeredCount / quizQuestions.length) * 100;
+        progressBar.style.width = `${progress}%`;
+        submitBtn.disabled = answeredCount !== quizQuestions.length;
+      }
+
+      function showResults(e) {
+        e.preventDefault();
+        let score = 0;
+        userAnswers.forEach((answer, index) => {
+          if (answer === quizQuestions[index].answer) score++;
+        });
+        const percentage = Math.round((score / quizQuestions.length) * 100);
+
+        gradeLevelEl.textContent = `Your Score: ${percentage}%`;
+        if (percentage >= 80) {
+          feedbackTextEl.textContent =
+            "Excellent work! You have a strong understanding of the material.";
+        } else if (percentage >= 60) {
+          feedbackTextEl.textContent =
+            "Good job. You passed, but a review of the material is recommended.";
+        } else {
+          feedbackTextEl.textContent =
+            "It looks like you had some trouble. Please review the lecture and try again.";
+        }
+        resultsModal.style.display = "flex";
+      }
+
+      renderQuestions();
+      questionsWrapper.addEventListener("click", handleOptionSelect);
+      quizForm.addEventListener("submit", showResults);
+    </script>
+  </body>
+</html>

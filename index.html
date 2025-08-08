@@ -3,33 +3,30 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Aliyah Course - Lecture 1 | Premium Edition</title>
+    <title>Aliyah Course - Lecture 1</title>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
-      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
       rel="stylesheet"
     />
     <style>
       :root {
-        --bg-color: #010206;
-        --primary-glow: #00aaff;
-        --secondary-glow: #be00ff;
-        --text-color: #e4e4e7;
-        --text-muted: #a1a1aa;
-        --card-bg: rgba(10, 12, 22, 0.5);
+        --bg-color: #f0f8ff; /* AliceBlue as base */
+        --text-color: #2c3e50;
+        --text-muted: #5a6775;
+        --primary-color: #007bff;
+        --card-bg: rgba(255, 255, 255, 0.75);
+        --shadow-color: rgba(44, 62, 80, 0.1);
       }
 
-      /* General Styling & Background */
       body {
-        font-family: "Inter", sans-serif;
+        font-family: "Poppins", sans-serif;
         background-color: var(--bg-color);
         color: var(--text-color);
         margin: 0;
-        line-height: 1.8;
+        line-height: 1.7;
         overflow-x: hidden;
-        -webkit-font-smoothing: antialiased;
-        -moz-osx-font-smoothing: grayscale;
       }
 
       #bg-canvas {
@@ -44,16 +41,16 @@
       .container {
         position: relative;
         z-index: 1;
-        max-width: 850px;
+        max-width: 900px;
         margin: 0 auto;
-        padding: 5rem 2rem;
-        animation: fadeIn 1.5s ease-out;
+        padding: 4rem 2rem;
+        animation: fadeIn 1s ease-out;
       }
 
       @keyframes fadeIn {
         from {
           opacity: 0;
-          transform: translateY(30px);
+          transform: translateY(20px);
         }
         to {
           opacity: 1;
@@ -61,122 +58,67 @@
         }
       }
 
-      /* Header */
       header {
         text-align: center;
-        margin-bottom: 4rem;
+        margin-bottom: 3rem;
+      }
+
+      .header-logo {
+        width: 80px;
+        height: auto;
+        margin-bottom: 1.5rem;
+        opacity: 0.8;
       }
 
       header h1 {
-        font-size: clamp(2.8rem, 6vw, 4.5rem);
+        font-size: clamp(2.5rem, 5vw, 3.5rem);
         font-weight: 700;
-        letter-spacing: -0.02em;
-        background: linear-gradient(90deg, #ffffff, #d1d1d1);
-        -webkit-background-clip: text;
-        -webkit-text-fill-color: transparent;
-        animation: shimmer 5s infinite linear;
-        text-shadow: 0 0 30px rgba(255, 255, 255, 0.1);
         margin: 0;
-      }
-
-      @keyframes shimmer {
-        0% {
-          background-position: -500%;
-        }
-        100% {
-          background-position: 500%;
-        }
       }
 
       header h2 {
         font-size: 1.2rem;
         font-weight: 400;
         color: var(--text-muted);
-        margin-top: 0.5rem;
-        letter-spacing: 0.01em;
       }
 
-      /* Main Content Card (Glassmorphism) */
+      .author-credit {
+        font-size: 1rem;
+        font-style: italic;
+        color: var(--text-muted);
+        margin-top: 0.5rem;
+      }
+
       .content-card {
         background: var(--card-bg);
-        backdrop-filter: blur(25px);
-        -webkit-backdrop-filter: blur(25px);
-        border-radius: 24px;
-        padding: 3rem;
-        box-shadow: 0 16px 48px rgba(0, 0, 0, 0.3);
-        position: relative;
+        backdrop-filter: blur(12px);
+        -webkit-backdrop-filter: blur(12px);
+        border-radius: 20px;
+        padding: 2.5rem;
+        box-shadow: 0 10px 35px var(--shadow-color);
+        border: 1px solid rgba(255, 255, 255, 0.5);
       }
 
-      /* Border with Gradient Glow */
-      .content-card::before {
-        content: "";
-        position: absolute;
-        inset: 0;
-        border-radius: 24px;
-        padding: 1px;
-        background: linear-gradient(
-          135deg,
-          rgba(255, 255, 255, 0.15),
-          rgba(255, 255, 255, 0.05)
-        );
-        -webkit-mask: linear-gradient(#fff 0 0) content-box,
-          linear-gradient(#fff 0 0);
-        -webkit-mask-composite: xor;
-        mask-composite: exclude;
-        pointer-events: none;
-      }
-
-      /* Scroll-driven animations for paragraphs */
       .lecture-text p {
-        font-size: 1.1rem;
+        font-size: 1.05rem;
+        margin-bottom: 1.5rem;
         color: var(--text-muted);
-        margin-bottom: 1.75rem;
-        transition: color 0.3s ease;
-        opacity: 0;
-        transform: translateY(20px);
-        animation: slide-up linear forwards;
-        animation-timeline: view();
-        animation-range-start: 100px;
-        animation-range-end: 400px;
-      }
-
-      .lecture-text p:hover {
-        color: var(--text-color);
-      }
-
-      @keyframes slide-up {
-        to {
-          opacity: 1;
-          transform: translateY(0);
-        }
       }
 
       .lecture-text h3 {
-        font-size: 1.6rem;
+        font-size: 1.5rem;
         font-weight: 600;
-        color: var(--primary-glow);
-        margin-top: 3rem;
-        margin-bottom: 1.5rem;
-        text-shadow: 0 0 12px var(--primary-glow);
+        color: var(--primary-color);
+        margin-top: 2.5rem;
+        margin-bottom: 1rem;
       }
 
-      /* Video Section */
       .video-container {
-        margin: 3rem 0;
+        margin: 2.5rem 0;
         border-radius: 16px;
         overflow: hidden;
         position: relative;
-        box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
-        border: 1px solid rgba(255, 255, 255, 0.1);
-        transition: transform 0.4s cubic-bezier(0.19, 1, 0.22, 1),
-          box-shadow 0.4s cubic-bezier(0.19, 1, 0.22, 1);
-        transform: perspective(1000px);
-      }
-
-      .video-container:hover {
-        transform: perspective(1000px) rotateX(2deg) rotateY(-2deg) scale(1.04);
-        box-shadow: 0 0 50px rgba(0, 170, 255, 0.3),
-          0 15px 30px rgba(0, 0, 0, 0.4);
+        box-shadow: 0 8px 25px var(--shadow-color);
       }
 
       .video-container iframe {
@@ -187,50 +129,31 @@
         border: none;
       }
 
-      /* Assessment Button */
-      .assessment-section {
-        text-align: center;
-        margin-top: 4rem;
+      .navigation-buttons {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-top: 3rem;
+        padding-top: 2rem;
+        border-top: 1px solid rgba(0, 0, 0, 0.08);
       }
 
-      .assessment-btn {
+      .nav-btn {
         display: inline-block;
-        background-size: 200% 100%;
-        background-image: linear-gradient(
-          110deg,
-          var(--secondary-glow) 0%,
-          var(--primary-glow) 50%,
-          var(--secondary-glow) 100%
-        );
+        background: var(--primary-color);
         color: #fff;
-        padding: 1.1rem 3.5rem;
-        font-size: 1.2rem;
-        font-weight: 600;
+        padding: 0.9rem 2.5rem;
+        font-size: 1rem;
+        font-weight: 500;
         text-decoration: none;
         border-radius: 50px;
-        transition: all 0.5s cubic-bezier(0.19, 1, 0.22, 1);
-        box-shadow: 0 0 25px rgba(0, 170, 255, 0.3),
-          0 0 25px rgba(190, 0, 255, 0.3);
-        border: none;
-        position: relative;
-        overflow: hidden;
+        transition: all 0.3s ease;
+        box-shadow: 0 4px 15px rgba(0, 123, 255, 0.2);
       }
 
-      .assessment-btn:hover {
-        transform: translateY(-5px) scale(1.05);
-        box-shadow: 0 0 40px rgba(0, 170, 255, 0.5),
-          0 0 40px rgba(190, 0, 255, 0.5);
-        background-position: 100% 0;
-      }
-
-      /* Responsive Design */
-      @media (max-width: 768px) {
-        .container {
-          padding: 3rem 1rem;
-        }
-        .content-card {
-          padding: 2rem;
-        }
+      .nav-btn:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 6px 20px rgba(0, 123, 255, 0.3);
       }
     </style>
   </head>
@@ -239,8 +162,14 @@
 
     <div class="container">
       <header>
+        <img
+          src="cropped-ICEJ-Logo-Emblem_blue.png"
+          alt="Course Logo"
+          class="header-logo"
+        />
         <h1>Aliyah Course</h1>
         <h2>Lecture 1: The Biblical and Historical Foundations</h2>
+        <p class="author-credit">By Arthur Howard Flower Th.D.</p>
       </header>
 
       <main class="content-card">
@@ -267,7 +196,7 @@
 
           <div class="video-container">
             <iframe
-              src="https://www.youtube.com/embed/UUW-xtkLOvw"
+              src="https://www.youtube.com/embed/UUW-xtkLOvw?rel=0"
               title="YouTube video player"
               allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
               allowfullscreen
@@ -343,14 +272,16 @@
             gladness, and sorrow and sighing shall flee away" (Isaiah 35:10).
           </p>
         </div>
-        <div class="assessment-section">
-          <a href="quiz1.html" class="assessment-btn">Take Assessment</a>
+
+        <div class="navigation-buttons">
+          <a href="quiz1.html" class="nav-btn">Take Assessment</a>
+          <a href="lecture2.html" class="nav-btn">Next Lesson →</a>
         </div>
       </main>
     </div>
 
     <script>
-      // Aurora, Grid, and Particle Background Script
+      // Light-themed animated grid, particle, and gradient background
       const canvas = document.getElementById("bg-canvas");
       const ctx = canvas.getContext("2d");
 
@@ -364,38 +295,38 @@
       });
 
       const particles = [];
-      const particleCount = 50;
+      const particleCount = 40;
 
       for (let i = 0; i < particleCount; i++) {
         particles.push({
           x: Math.random() * width,
           y: Math.random() * height,
-          vx: (Math.random() - 0.5) * 0.3,
-          vy: (Math.random() - 0.5) * 0.3,
-          radius: Math.random() * 1.5 + 0.5,
+          vx: (Math.random() - 0.5) * 0.2,
+          vy: (Math.random() - 0.5) * 0.2,
+          radius: Math.random() * 1,
         });
       }
 
       function drawGrid() {
         ctx.save();
-        ctx.strokeStyle = "rgba(0, 170, 255, 0.05)";
-        ctx.lineWidth = 1;
-        const gridSize = 50;
+        ctx.strokeStyle = "rgba(0, 123, 255, 0.1)";
+        ctx.lineWidth = 0.5;
+        const gridSize = 60;
 
         ctx.translate(width / 2, height / 2);
-        ctx.rotate(time * 0.0001);
+        ctx.rotate(time * 0.00005);
         ctx.translate(-width / 2, -height / 2);
 
-        for (let i = 0; i < width; i += gridSize) {
+        for (let i = -width; i < width * 2; i += gridSize) {
           ctx.beginPath();
-          ctx.moveTo(i, 0);
-          ctx.lineTo(i, height);
+          ctx.moveTo(i, -height);
+          ctx.lineTo(i, height * 2);
           ctx.stroke();
         }
-        for (let j = 0; j < height; j += gridSize) {
+        for (let j = -height; j < height * 2; j += gridSize) {
           ctx.beginPath();
-          ctx.moveTo(0, j);
-          ctx.lineTo(width, j);
+          ctx.moveTo(-width, j);
+          ctx.lineTo(width * 2, j);
           ctx.stroke();
         }
         ctx.restore();
@@ -405,18 +336,17 @@
         time++;
         ctx.clearRect(0, 0, width, height);
 
-        // Aurora Gradient
+        // Subtle light gradient
         const gradient = ctx.createRadialGradient(
-          width / 2 + Math.sin(time * 0.001) * width * 0.2,
-          height / 2 + Math.cos(time * 0.001) * height * 0.2,
+          width / 2 + Math.sin(time * 0.0005) * width * 0.1,
+          height / 2 + Math.cos(time * 0.0005) * height * 0.1,
           0,
           width / 2,
           height / 2,
-          Math.max(width, height) * 0.8
+          Math.max(width, height)
         );
-        gradient.addColorStop(0, "rgba(0, 170, 255, 0.15)");
-        gradient.addColorStop(0.5, "rgba(190, 0, 255, 0.15)");
-        gradient.addColorStop(1, "rgba(1, 2, 6, 0)");
+        gradient.addColorStop(0, "rgba(230, 247, 255, 0.3)");
+        gradient.addColorStop(1, "rgba(240, 248, 255, 0)");
         ctx.fillStyle = gradient;
         ctx.fillRect(0, 0, width, height);
 
@@ -429,7 +359,7 @@
           if (p.y < 0 || p.y > height) p.vy *= -1;
           ctx.beginPath();
           ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
-          ctx.fillStyle = "rgba(255, 255, 255, 0.6)";
+          ctx.fillStyle = "rgba(44, 62, 80, 0.4)";
           ctx.fill();
         });
 
