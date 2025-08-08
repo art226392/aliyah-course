@@ -12,20 +12,32 @@
     />
     <style>
       :root {
-        --bg-start: #f0f8ff;
-        --bg-end: #e6f7ff;
         --text-color: #2c3e50;
         --text-muted: #5a6775;
         --primary-color: #007bff;
-        --card-bg: rgba(255, 255, 255, 0.8);
-        --shadow-color: rgba(44, 62, 80, 0.1);
+        --card-bg: rgba(255, 255, 255, 0.85);
+        --shadow-color: rgba(44, 62, 80, 0.15);
         --correct-color: #28a745;
         --incorrect-color: #dc3545;
       }
 
       body {
         font-family: "Poppins", sans-serif;
-        background: linear-gradient(135deg, var(--bg-start), var(--bg-end));
+        background: linear-gradient(
+          180deg,
+          #87ceeb 0%,
+          /* Sky Blue */ #98d8e8 10%,
+          /* Lighter Blue */ #b0e0e6 20%,
+          /* Powder Blue */ #add8e6 30%,
+          /* Light Blue */ #87ceeb 40%,
+          /* Sky Blue */ #ffe4b5 50%,
+          /* Moccasin - sunset transition */ #ffdab9 60%,
+          /* Peach Puff */ #ffd4a3 70%,
+          /* Warm Peach */ #ffa07a 80%,
+          /* Light Salmon */ #ff8c69 90%,
+          /* Salmon */ #ff7f50 100% /* Coral */
+        );
+        background-attachment: fixed;
         color: var(--text-color);
         margin: 0;
         padding: 2rem;
@@ -33,87 +45,319 @@
         justify-content: center;
         align-items: flex-start;
         min-height: 100vh;
+        position: relative;
+        overflow-x: hidden;
+      }
+
+      /* Overlay for depth */
+      body::before {
+        content: "";
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: radial-gradient(
+            ellipse at top,
+            rgba(255, 255, 255, 0.3) 0%,
+            transparent 50%
+          ),
+          radial-gradient(
+            ellipse at bottom,
+            rgba(255, 140, 90, 0.2) 0%,
+            transparent 50%
+          );
+        pointer-events: none;
+        z-index: 1;
+      }
+
+      /* Cloud effect */
+      .clouds {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        pointer-events: none;
+        z-index: 2;
+        opacity: 0.4;
+      }
+
+      .cloud {
+        position: absolute;
+        background: white;
+        border-radius: 100px;
+        opacity: 0.5;
+      }
+
+      .cloud::before,
+      .cloud::after {
+        content: "";
+        position: absolute;
+        background: white;
+        border-radius: 100px;
+      }
+
+      .cloud1 {
+        width: 100px;
+        height: 40px;
+        top: 10%;
+        animation: float 60s infinite;
+      }
+
+      .cloud1::before {
+        width: 50px;
+        height: 50px;
+        top: -25px;
+        left: 10px;
+      }
+
+      .cloud1::after {
+        width: 60px;
+        height: 40px;
+        top: -15px;
+        right: 10px;
+      }
+
+      .cloud2 {
+        width: 80px;
+        height: 35px;
+        top: 25%;
+        animation: float 70s infinite reverse;
+        animation-delay: 20s;
+      }
+
+      .cloud2::before {
+        width: 60px;
+        height: 40px;
+        top: -20px;
+        left: 15px;
+      }
+
+      .cloud2::after {
+        width: 50px;
+        height: 35px;
+        top: -10px;
+        right: 15px;
+      }
+
+      .cloud3 {
+        width: 120px;
+        height: 45px;
+        top: 40%;
+        animation: float 80s infinite;
+        animation-delay: 40s;
+      }
+
+      .cloud3::before {
+        width: 70px;
+        height: 50px;
+        top: -25px;
+        left: 20px;
+      }
+
+      .cloud3::after {
+        width: 80px;
+        height: 45px;
+        top: -15px;
+        right: 20px;
+      }
+
+      @keyframes float {
+        from {
+          transform: translateX(-200px);
+        }
+        to {
+          transform: translateX(calc(100vw + 200px));
+        }
       }
 
       .quiz-container {
+        position: relative;
+        z-index: 10;
         width: 100%;
         max-width: 900px;
         background: var(--card-bg);
-        backdrop-filter: blur(10px);
-        -webkit-backdrop-filter: blur(10px);
+        backdrop-filter: blur(15px);
+        -webkit-backdrop-filter: blur(15px);
         border-radius: 20px;
         padding: 2.5rem;
-        box-shadow: 0 10px 35px var(--shadow-color);
+        box-shadow: 0 20px 60px var(--shadow-color),
+          0 0 0 1px rgba(255, 255, 255, 0.5) inset;
+        animation: fadeIn 1s ease-out;
+      }
+
+      @keyframes fadeIn {
+        from {
+          opacity: 0;
+          transform: translateY(30px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
       }
 
       .quiz-header {
         text-align: center;
         margin-bottom: 2rem;
-        border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+        border-bottom: 2px solid rgba(0, 123, 255, 0.1);
         padding-bottom: 1.5rem;
       }
 
       .header-logo {
-        width: 60px;
+        width: 70px;
         height: auto;
         margin-bottom: 1rem;
-        opacity: 0.8;
+        opacity: 0.9;
+        filter: drop-shadow(0 4px 6px rgba(0, 0, 0, 0.1));
       }
 
       .quiz-header h1 {
-        font-size: 2rem;
+        font-size: 2.5rem;
         font-weight: 700;
+        background: linear-gradient(135deg, var(--primary-color), #0056b3);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      }
+
+      .progress-container {
+        width: 100%;
+        background: linear-gradient(90deg, #e9ecef, #f8f9fa);
+        border-radius: 10px;
+        margin-top: 1rem;
+        height: 12px;
+        box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.1);
+        overflow: hidden;
       }
 
       .progress-bar {
         width: 0%;
-        height: 10px;
-        background-color: var(--primary-color);
-        border-radius: 5px;
+        height: 100%;
+        background: linear-gradient(90deg, var(--primary-color), #0056b3);
+        border-radius: 10px;
         transition: width 0.5s ease;
+        box-shadow: 0 2px 8px rgba(0, 123, 255, 0.3);
+      }
+
+      .stats-container {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-top: 1rem;
+        color: var(--text-muted);
+        font-size: 0.95rem;
+      }
+
+      .question-block {
+        margin-bottom: 1.5rem;
+        padding: 1.5rem;
+        background: linear-gradient(
+          135deg,
+          rgba(255, 255, 255, 0.9),
+          rgba(248, 249, 250, 0.9)
+        );
+        border-radius: 12px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+        animation: slideIn 0.5s ease-out;
+      }
+
+      @keyframes slideIn {
+        from {
+          opacity: 0;
+          transform: translateX(-20px);
+        }
+        to {
+          opacity: 1;
+          transform: translateX(0);
+        }
       }
 
       .question-block h2 {
         font-size: 1.15rem;
         margin-bottom: 1rem;
         font-weight: 600;
+        color: var(--text-color);
+      }
+
+      .options-list {
+        list-style: none;
+        padding: 0;
+        margin: 0;
       }
 
       .options-list li {
-        background-color: #fff;
-        margin: 0.5rem 0;
-        padding: 0.9rem 1.2rem;
-        border-radius: 8px;
-        border: 1px solid #ced4da;
+        background: white;
+        margin: 0.6rem 0;
+        padding: 1rem 1.25rem;
+        border-radius: 10px;
+        border: 2px solid #e0e0e0;
         cursor: pointer;
-        transition: all 0.2s ease;
+        transition: all 0.3s ease;
+        position: relative;
+        overflow: hidden;
+      }
+
+      .options-list li::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(
+          90deg,
+          transparent,
+          rgba(0, 123, 255, 0.1),
+          transparent
+        );
+        transition: left 0.5s ease;
       }
 
       .options-list li:hover {
         border-color: var(--primary-color);
-        transform: translateY(-2px);
+        transform: translateX(5px);
+        box-shadow: 0 4px 12px rgba(0, 123, 255, 0.15);
+      }
+
+      .options-list li:hover::before {
+        left: 100%;
       }
 
       .options-list li.selected {
-        background-color: var(--primary-color);
+        background: linear-gradient(135deg, var(--primary-color), #0056b3);
         border-color: #0056b3;
-        color: #fff;
+        color: white;
+        font-weight: 600;
+        box-shadow: 0 4px 12px rgba(0, 123, 255, 0.3);
       }
 
       #submit-btn {
-        background: var(--correct-color);
-        color: #fff;
-        padding: 1rem;
-        border-radius: 10px;
+        background: linear-gradient(135deg, var(--correct-color), #22863a);
+        color: white;
+        padding: 1rem 2rem;
+        border-radius: 12px;
         border: none;
         width: 100%;
         margin-top: 2rem;
         font-size: 1.1rem;
+        font-weight: 600;
         cursor: pointer;
+        transition: all 0.3s ease;
+        box-shadow: 0 4px 15px rgba(40, 167, 69, 0.3);
+      }
+
+      #submit-btn:hover:not(:disabled) {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 20px rgba(40, 167, 69, 0.4);
       }
 
       #submit-btn:disabled {
-        background: #6c757d;
+        background: linear-gradient(135deg, #6c757d, #5a6268);
+        cursor: not-allowed;
+        box-shadow: none;
       }
 
       .modal-overlay {
@@ -122,40 +366,201 @@
         left: 0;
         width: 100%;
         height: 100%;
-        background: rgba(0, 0, 0, 0.5);
+        background: rgba(0, 0, 0, 0.7);
+        backdrop-filter: blur(5px);
         display: none;
         justify-content: center;
         align-items: center;
+        z-index: 1000;
+        animation: fadeIn 0.3s;
       }
 
       .modal-content {
-        background: #fff;
-        padding: 2rem;
-        border-radius: 16px;
+        background: linear-gradient(135deg, white, #f8f9fa);
+        padding: 2.5rem;
+        border-radius: 20px;
         width: 90%;
-        max-width: 500px;
+        max-width: 600px;
         text-align: center;
+        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+        animation: slideUp 0.5s ease-out;
+      }
+
+      @keyframes slideUp {
+        from {
+          opacity: 0;
+          transform: translateY(50px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      .modal-content h2 {
+        color: var(--primary-color);
+        margin-bottom: 1rem;
+        font-size: 2rem;
+      }
+
+      #score-percentage {
+        font-size: 4rem;
+        font-weight: 700;
+        margin: 1rem 0;
+        background: linear-gradient(
+          135deg,
+          var(--primary-color),
+          var(--correct-color)
+        );
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+      }
+
+      #grade-level {
+        font-size: 1.5rem;
+        font-weight: bold;
+        margin-bottom: 1rem;
+      }
+
+      .grade-excellent {
+        color: var(--correct-color);
+      }
+      .grade-good {
+        color: var(--primary-color);
+      }
+      .grade-pass {
+        color: #ffc107;
+      }
+      .grade-improve {
+        color: var(--incorrect-color);
+      }
+
+      #feedback-text {
+        color: var(--text-muted);
+        margin-bottom: 1.5rem;
+        line-height: 1.6;
+      }
+
+      .modal-buttons {
+        display: flex;
+        justify-content: center;
+        gap: 1rem;
+        flex-wrap: wrap;
+      }
+
+      .modal-buttons button,
+      .modal-buttons a {
+        padding: 0.8rem 1.5rem;
+        border: 2px solid var(--primary-color);
+        background: white;
+        color: var(--primary-color);
+        border-radius: 10px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        font-size: 1rem;
+        font-weight: 500;
+        text-decoration: none;
+        display: inline-block;
+      }
+
+      .modal-buttons button:hover,
+      .modal-buttons a:hover {
+        background: var(--primary-color);
+        color: white;
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(0, 123, 255, 0.3);
+      }
+
+      #next-lecture-btn {
+        background: linear-gradient(135deg, var(--correct-color), #22863a);
+        color: white;
+        border: none;
+      }
+
+      #next-lecture-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(40, 167, 69, 0.3);
+      }
+
+      #answer-review {
+        margin-top: 1.5rem;
+        max-height: 250px;
+        overflow-y: auto;
+        text-align: left;
+        padding: 1rem;
+        background: #f8f9fa;
+        border-radius: 10px;
+      }
+
+      .review-item {
+        padding: 0.8rem;
+        margin-bottom: 0.8rem;
+        border-left: 4px solid;
+        background: white;
+        border-radius: 8px;
+      }
+
+      .review-item.correct {
+        border-color: var(--correct-color);
+      }
+
+      .review-item.incorrect {
+        border-color: var(--incorrect-color);
+      }
+
+      .review-question {
+        font-weight: 600;
+        margin-bottom: 0.5rem;
+      }
+
+      .correct-answer {
+        color: var(--correct-color);
+      }
+
+      .incorrect-answer {
+        color: var(--incorrect-color);
+      }
+
+      @media (max-width: 768px) {
+        body {
+          padding: 1rem;
+        }
+        .quiz-container {
+          padding: 1.5rem;
+        }
+        .modal-buttons {
+          flex-direction: column;
+        }
+        .modal-buttons button,
+        .modal-buttons a {
+          width: 100%;
+        }
       }
     </style>
   </head>
   <body>
+    <!-- Animated clouds -->
+    <div class="clouds">
+      <div class="cloud cloud1"></div>
+      <div class="cloud cloud2"></div>
+      <div class="cloud cloud3"></div>
+    </div>
+
     <div class="quiz-container">
       <header class="quiz-header">
         <img
-          src="http://googleusercontent.com/file_content/11"
+          src="cropped-ICEJ-Logo-Emblem_blue.png"
           alt="Course Logo"
           class="header-logo"
         />
         <h1>Assessment 2</h1>
-        <div
-          style="
-            width: 100%;
-            background-color: #e9ecef;
-            border-radius: 5px;
-            margin-top: 1rem;
-          "
-        >
+        <div class="progress-container">
           <div class="progress-bar" id="progress-bar"></div>
+        </div>
+        <div class="stats-container">
+          <div id="question-counter">Answered: 0 / 15</div>
+          <div id="timer">Time: 00:00</div>
         </div>
       </header>
 
@@ -169,11 +574,16 @@
 
     <div id="results-modal" class="modal-overlay">
       <div class="modal-content">
-        <h2 id="grade-level"></h2>
+        <h2>Assessment Complete!</h2>
+        <div id="score-percentage">0%</div>
+        <div id="grade-level"></div>
         <p id="feedback-text"></p>
-        <button onclick="location.href='lecture2.html'">
-          Return to Lecture
-        </button>
+        <div id="answer-review"></div>
+        <div class="modal-buttons">
+          <a href="lecture2.html">Return to Lecture</a>
+          <button id="retry-btn">Retry Quiz</button>
+          <a href="#" id="next-lecture-btn">Next Lecture →</a>
+        </div>
       </div>
     </div>
 
@@ -336,15 +746,25 @@
         },
       ];
 
-      // --- The rest of the quiz logic remains the same ---
+      // Quiz functionality
       const questionsWrapper = document.getElementById("questions-wrapper");
       const quizForm = document.getElementById("quiz-form");
       const submitBtn = document.getElementById("submit-btn");
       const progressBar = document.getElementById("progress-bar");
+      const questionCounter = document.getElementById("question-counter");
+      const timerEl = document.getElementById("timer");
       const resultsModal = document.getElementById("results-modal");
+      const scorePercentageEl = document.getElementById("score-percentage");
       const gradeLevelEl = document.getElementById("grade-level");
       const feedbackTextEl = document.getElementById("feedback-text");
+      const retryBtn = document.getElementById("retry-btn");
+      const answerReviewEl = document.getElementById("answer-review");
+      const nextLectureBtn = document.getElementById("next-lecture-btn");
+
       let userAnswers = new Array(quizQuestions.length).fill(null);
+      let timerInterval;
+      let seconds = 0;
+      let quizInProgress = true;
 
       function renderQuestions() {
         let questionsHTML = "";
@@ -367,40 +787,207 @@
         options.forEach((opt) => opt.classList.remove("selected"));
         e.target.classList.add("selected");
         updateProgress();
+        saveProgress();
       }
 
       function updateProgress() {
         const answeredCount = userAnswers.filter((a) => a !== null).length;
         const progress = (answeredCount / quizQuestions.length) * 100;
         progressBar.style.width = `${progress}%`;
+        questionCounter.textContent = `Answered: ${answeredCount} / ${quizQuestions.length}`;
         submitBtn.disabled = answeredCount !== quizQuestions.length;
+      }
+
+      function startTimer() {
+        timerInterval = setInterval(() => {
+          seconds++;
+          const mins = Math.floor(seconds / 60)
+            .toString()
+            .padStart(2, "0");
+          const secs = (seconds % 60).toString().padStart(2, "0");
+          timerEl.textContent = `Time: ${mins}:${secs}`;
+        }, 1000);
       }
 
       function showResults(e) {
         e.preventDefault();
+        quizInProgress = false;
+        clearInterval(timerInterval);
+
         let score = 0;
         userAnswers.forEach((answer, index) => {
           if (answer === quizQuestions[index].answer) score++;
         });
+
         const percentage = Math.round((score / quizQuestions.length) * 100);
 
-        gradeLevelEl.textContent = `Your Score: ${percentage}%`;
-        if (percentage >= 80) {
-          feedbackTextEl.textContent =
-            "Excellent work! You have a strong understanding of the material.";
+        // Animate score
+        let currentPercent = 0;
+        const scoreAnimation = setInterval(() => {
+          if (currentPercent >= percentage) {
+            clearInterval(scoreAnimation);
+            scorePercentageEl.textContent = `${percentage}%`;
+          } else {
+            currentPercent += 2;
+            scorePercentageEl.textContent = `${Math.min(
+              currentPercent,
+              percentage
+            )}%`;
+          }
+        }, 20);
+
+        // Determine grade and feedback
+        let grade = "";
+        let feedback = "";
+        let gradeClass = "";
+
+        if (percentage >= 90) {
+          grade = "EXCELLENT!";
+          feedback =
+            "Outstanding work! You have mastered the material. You're ready for the next lecture!";
+          gradeClass = "grade-excellent";
+          nextLectureBtn.style.display = "inline-block";
+          nextLectureBtn.href = "lecture3.html"; // Assuming next lecture
+        } else if (percentage >= 75) {
+          grade = "GOOD JOB!";
+          feedback =
+            "Great work! You have a solid understanding of the material. Feel free to proceed to the next lecture.";
+          gradeClass = "grade-good";
+          nextLectureBtn.style.display = "inline-block";
+          nextLectureBtn.href = "lecture3.html";
         } else if (percentage >= 60) {
-          feedbackTextEl.textContent =
-            "Good job. You passed, but a review of the material is recommended.";
+          grade = "PASSED";
+          feedback =
+            "You passed! Consider reviewing the incorrect answers before moving to the next lecture.";
+          gradeClass = "grade-pass";
+          nextLectureBtn.style.display = "inline-block";
+          nextLectureBtn.href = "lecture3.html";
         } else {
-          feedbackTextEl.textContent =
-            "It looks like you had some trouble. Please review the lecture and try again.";
+          grade = "NEEDS IMPROVEMENT";
+          feedback =
+            "It looks like you need more review. Please go back to the lecture material and try the quiz again.";
+          gradeClass = "grade-improve";
+          nextLectureBtn.style.display = "none"; // Hide next lecture button for low scores
         }
+
+        gradeLevelEl.textContent = grade;
+        gradeLevelEl.className = gradeClass;
+        feedbackTextEl.textContent = feedback;
+
+        renderAnswerReview();
         resultsModal.style.display = "flex";
+        clearProgress();
       }
 
-      renderQuestions();
+      function renderAnswerReview() {
+        let reviewHTML = "";
+        quizQuestions.forEach((q, index) => {
+          const userAnswerIndex = userAnswers[index];
+          const correctAnswerIndex = q.answer;
+          const isCorrect = userAnswerIndex === correctAnswerIndex;
+
+          reviewHTML += `<div class="review-item ${
+            isCorrect ? "correct" : "incorrect"
+          }">
+            <p class="review-question">${index + 1}. ${q.question}</p>
+            ${
+              isCorrect
+                ? `<p>Your answer: <span class="correct-answer">✓ ${q.options[userAnswerIndex]}</span></p>`
+                : `<p>Your answer: <span class="incorrect-answer">✗ ${
+                    userAnswerIndex !== null
+                      ? q.options[userAnswerIndex]
+                      : "No answer"
+                  }</span></p>
+                <p>Correct answer: <span class="correct-answer">${
+                  q.options[correctAnswerIndex]
+                }</span></p>`
+            }
+          </div>`;
+        });
+        answerReviewEl.innerHTML = reviewHTML;
+      }
+
+      function saveProgress() {
+        const quizState = {
+          answers: userAnswers,
+          time: seconds,
+          quizId: "quiz2",
+        };
+        localStorage.setItem("aliyahQuiz2Progress", JSON.stringify(quizState));
+      }
+
+      function loadProgress() {
+        const savedState = localStorage.getItem("aliyahQuiz2Progress");
+        if (savedState) {
+          const confirmResume = confirm(
+            "You have a quiz in progress. Would you like to continue where you left off?"
+          );
+          if (confirmResume) {
+            const { answers, time } = JSON.parse(savedState);
+            userAnswers = answers;
+            seconds = time;
+
+            // Restore selected answers visually
+            userAnswers.forEach((answer, qIndex) => {
+              if (answer !== null) {
+                const questionBlock = questionsWrapper.children[qIndex];
+                if (questionBlock) {
+                  const optionItem = questionBlock.querySelector(
+                    `li[data-option-index="${answer}"]`
+                  );
+                  if (optionItem) {
+                    optionItem.classList.add("selected");
+                  }
+                }
+              }
+            });
+            updateProgress();
+          } else {
+            clearProgress();
+          }
+        }
+      }
+
+      function clearProgress() {
+        localStorage.removeItem("aliyahQuiz2Progress");
+      }
+
+      // Event listeners
       questionsWrapper.addEventListener("click", handleOptionSelect);
       quizForm.addEventListener("submit", showResults);
+      retryBtn.addEventListener("click", () => {
+        window.location.reload();
+      });
+
+      // Keyboard shortcut
+      document.addEventListener("keydown", (e) => {
+        if (e.ctrlKey && e.key === "Enter") {
+          if (!submitBtn.disabled) {
+            showResults(e);
+          }
+        }
+      });
+
+      // Prevent accidental navigation
+      window.onbeforeunload = (e) => {
+        if (quizInProgress && userAnswers.some((a) => a !== null)) {
+          e.preventDefault();
+          e.returnValue = "";
+          return "Are you sure you want to leave? Your progress will be saved.";
+        }
+      };
+
+      // Initialize quiz
+      renderQuestions();
+      loadProgress();
+      startTimer();
+
+      // Auto-save progress every 30 seconds
+      setInterval(() => {
+        if (quizInProgress) {
+          saveProgress();
+        }
+      }, 30000);
     </script>
   </body>
 </html>
