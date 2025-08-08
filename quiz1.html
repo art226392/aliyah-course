@@ -1,0 +1,826 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Aliyah Course - Assessment 1 | 2025 Edition</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      :root {
+        --bg-color: #02040a;
+        --primary-glow: #00aaff;
+        --secondary-glow: #aa00ff;
+        --correct-glow: #00ff88;
+        --incorrect-glow: #ff4444;
+        --text-color: #e4e4e7;
+        --text-muted: #a1a1aa;
+        --card-bg: rgba(10, 15, 30, 0.6);
+      }
+
+      /* General Styling & Background */
+      body {
+        font-family: "Inter", sans-serif;
+        background-color: var(--bg-color);
+        color: var(--text-color);
+        margin: 0;
+        padding: 2rem;
+        display: flex;
+        justify-content: center;
+        align-items: flex-start;
+        min-height: 100vh;
+        overflow-x: hidden;
+      }
+
+      #bg-canvas {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        z-index: -1;
+      }
+
+      .quiz-container {
+        position: relative;
+        z-index: 1;
+        width: 100%;
+        max-width: 900px;
+        background: var(--card-bg);
+        backdrop-filter: blur(20px);
+        -webkit-backdrop-filter: blur(20px);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        border-radius: 24px;
+        padding: 2.5rem;
+        box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+        animation: fadeIn 1s ease-out;
+      }
+
+      @keyframes fadeIn {
+        from {
+          opacity: 0;
+          transform: translateY(30px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      /* Header */
+      .quiz-header {
+        text-align: center;
+        margin-bottom: 2rem;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        padding-bottom: 1.5rem;
+      }
+
+      .quiz-header h1 {
+        font-size: 2.5rem;
+        font-weight: 700;
+        color: #fff;
+        text-shadow: 0 0 10px var(--primary-glow), 0 0 20px var(--primary-glow);
+      }
+
+      /* Progress Bar & Stats */
+      .progress-bar-container {
+        width: 100%;
+        background-color: rgba(0, 0, 0, 0.3);
+        border-radius: 10px;
+        margin-top: 1.5rem;
+        height: 10px;
+        border: 1px solid rgba(255, 255, 255, 0.1);
+      }
+
+      .progress-bar {
+        width: 0%;
+        height: 100%;
+        background: linear-gradient(
+          90deg,
+          var(--primary-glow),
+          var(--secondary-glow)
+        );
+        border-radius: 10px;
+        transition: width 0.5s ease-in-out;
+        box-shadow: 0 0 8px var(--primary-glow);
+      }
+
+      .stats-container {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-top: 1rem;
+        color: var(--text-muted);
+      }
+
+      /* Question Styling */
+      .question-block {
+        margin-bottom: 1.5rem;
+        padding: 1.5rem;
+        background: rgba(255, 255, 255, 0.03);
+        border-radius: 16px;
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        animation: slideIn 0.5s ease-out forwards;
+        opacity: 0;
+      }
+
+      @keyframes slideIn {
+        from {
+          opacity: 0;
+          transform: translateX(-20px);
+        }
+        to {
+          opacity: 1;
+          transform: translateX(0);
+        }
+      }
+
+      .question-block h2 {
+        font-size: 1.2rem;
+        margin-bottom: 1rem;
+        color: var(--text-color);
+        font-weight: 500;
+      }
+
+      .options-list li {
+        background-color: rgba(0, 0, 0, 0.2);
+        margin: 0.7rem 0;
+        padding: 1rem;
+        border-radius: 12px;
+        border: 1px solid rgba(255, 255, 255, 0.15);
+        cursor: pointer;
+        transition: all 0.3s ease;
+      }
+
+      .options-list li:hover {
+        background-color: rgba(0, 170, 255, 0.1);
+        border-color: var(--primary-glow);
+      }
+
+      .options-list li.selected {
+        background: linear-gradient(
+          90deg,
+          rgba(0, 170, 255, 0.3),
+          rgba(170, 0, 255, 0.3)
+        );
+        border-color: var(--secondary-glow);
+        color: #fff;
+        font-weight: 600;
+      }
+
+      /* Submit Button */
+      #submit-btn {
+        display: block;
+        width: 100%;
+        padding: 1rem;
+        font-size: 1.2rem;
+        font-weight: 600;
+        color: #fff;
+        background: linear-gradient(90deg, var(--correct-glow), #00b36b);
+        border: none;
+        border-radius: 12px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        margin-top: 2rem;
+        box-shadow: 0 0 20px rgba(0, 255, 136, 0.3);
+      }
+
+      #submit-btn:hover:not(:disabled) {
+        transform: translateY(-3px);
+        box-shadow: 0 0 30px rgba(0, 255, 136, 0.5);
+      }
+
+      #submit-btn:disabled {
+        background: #374151;
+        cursor: not-allowed;
+        box-shadow: none;
+      }
+
+      /* Results Modal */
+      .modal-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.7);
+        backdrop-filter: blur(10px);
+        display: none;
+        justify-content: center;
+        align-items: center;
+        z-index: 1000;
+        animation: fadeIn 0.5s;
+      }
+
+      .modal-content {
+        background: var(--card-bg);
+        padding: 2.5rem;
+        border-radius: 20px;
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        width: 90%;
+        max-width: 600px;
+        text-align: center;
+        box-shadow: 0 0 40px rgba(0, 0, 0, 0.5);
+        animation: slideInUp 0.5s;
+      }
+
+      @keyframes slideInUp {
+        from {
+          opacity: 0;
+          transform: translateY(50px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      #score-percentage {
+        font-size: 4.5rem;
+        font-weight: 700;
+        margin: 1rem 0;
+      }
+
+      #grade-level {
+        font-size: 1.5rem;
+        font-weight: bold;
+        margin-bottom: 1.5rem;
+      }
+
+      .grade-excellent {
+        color: var(--correct-glow);
+        text-shadow: 0 0 15px var(--correct-glow);
+      }
+      .grade-good {
+        color: var(--primary-glow);
+        text-shadow: 0 0 15px var(--primary-glow);
+      }
+      .grade-pass {
+        color: #ffaa00;
+        text-shadow: 0 0 15px #ffaa00;
+      }
+      .grade-improve {
+        color: var(--incorrect-glow);
+        text-shadow: 0 0 15px var(--incorrect-glow);
+      }
+
+      .modal-buttons button,
+      .modal-buttons a {
+        padding: 0.8rem 1.5rem;
+        border: 1px solid var(--primary-glow);
+        background: transparent;
+        color: var(--primary-glow);
+        border-radius: 8px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        font-size: 1rem;
+        text-decoration: none;
+        margin: 0.5rem;
+      }
+
+      .modal-buttons button:hover,
+      .modal-buttons a:hover {
+        background: var(--primary-glow);
+        color: var(--bg-color);
+        box-shadow: 0 0 15px var(--primary-glow);
+      }
+
+      #certificate-btn {
+        border-color: var(--correct-glow);
+        color: var(--correct-glow);
+        display: none;
+      }
+
+      #certificate-btn:hover {
+        background: var(--correct-glow);
+        box-shadow: 0 0 15px var(--correct-glow);
+      }
+
+      /* Answer Review Section */
+      #answer-review {
+        margin-top: 2rem;
+        max-height: 250px;
+        overflow-y: auto;
+        text-align: left;
+        padding: 0.5rem;
+        background: rgba(0, 0, 0, 0.2);
+        border-radius: 12px;
+      }
+
+      .review-item {
+        padding: 1rem;
+        margin-bottom: 1rem;
+        border-left: 4px solid;
+        background: rgba(0, 0, 0, 0.2);
+        border-radius: 8px;
+      }
+
+      .review-item.correct {
+        border-color: var(--correct-glow);
+      }
+      .review-item.incorrect {
+        border-color: var(--incorrect-glow);
+      }
+
+      .review-item .correct-answer {
+        color: var(--correct-glow);
+      }
+      .review-item .incorrect-answer {
+        color: var(--incorrect-glow);
+      }
+
+      /* Responsive Design */
+      @media (max-width: 768px) {
+        body {
+          padding: 1rem;
+        }
+        .quiz-container {
+          padding: 1.5rem;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <canvas id="bg-canvas"></canvas>
+
+    <div class="quiz-container">
+      <header class="quiz-header">
+        <h1>Assessment 1</h1>
+        <div class="progress-bar-container">
+          <div class="progress-bar" id="progress-bar"></div>
+        </div>
+        <div class="stats-container">
+          <div id="question-counter">Answered: 0 / 15</div>
+          <div id="timer">Time: 00:00</div>
+        </div>
+      </header>
+
+      <form id="quiz-form">
+        <div id="questions-wrapper">
+          <!-- Questions dynamically inserted here -->
+        </div>
+        <button type="submit" id="submit-btn" disabled>
+          Submit Assessment
+        </button>
+      </form>
+    </div>
+
+    <!-- Results Modal -->
+    <div id="results-modal" class="modal-overlay">
+      <div class="modal-content">
+        <h2>Assessment Complete</h2>
+        <div id="score-percentage">0%</div>
+        <div id="grade-level"></div>
+        <p id="feedback-text"></p>
+        <div id="answer-review"></div>
+        <div class="modal-buttons">
+          <a href="lecture1.html">Return to Lecture</a>
+          <button id="retry-btn">Retry Quiz</button>
+          <button id="certificate-btn">Generate Certificate</button>
+        </div>
+      </div>
+    </div>
+
+    <div
+      id="lock-overlay"
+      style="
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.9);
+        z-index: 2000;
+        color: white;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+        text-align: center;
+      "
+    >
+      <h2>⚠️ Navigation Locked</h2>
+      <p>Please complete the assessment.</p>
+    </div>
+
+    <script>
+      // Aurora & Particle Background Script
+      const canvas = document.getElementById("bg-canvas");
+      const ctx = canvas.getContext("2d");
+      let width = (canvas.width = window.innerWidth);
+      let height = (canvas.height = window.innerHeight);
+      window.addEventListener("resize", () => {
+        width = canvas.width = window.innerWidth;
+        height = canvas.height = window.innerHeight;
+      });
+      const particles = [];
+      for (let i = 0; i < 50; i++) {
+        particles.push({
+          x: Math.random() * width,
+          y: Math.random() * height,
+          vx: (Math.random() - 0.5) * 0.5,
+          vy: (Math.random() - 0.5) * 0.5,
+          radius: Math.random() * 1.5 + 0.5,
+        });
+      }
+      function animateBackground() {
+        ctx.clearRect(0, 0, width, height);
+        const gradient = ctx.createRadialGradient(
+          width / 4,
+          height / 4,
+          0,
+          width / 2,
+          height / 2,
+          Math.max(width, height)
+        );
+        gradient.addColorStop(0, "rgba(0, 170, 255, 0.2)");
+        gradient.addColorStop(0.5, "rgba(170, 0, 255, 0.2)");
+        gradient.addColorStop(1, "rgba(2, 4, 10, 0)");
+        ctx.fillStyle = gradient;
+        ctx.fillRect(0, 0, width, height);
+        particles.forEach((p) => {
+          p.x += p.vx;
+          p.y += p.vy;
+          if (p.x < 0 || p.x > width) p.vx *= -1;
+          if (p.y < 0 || p.y > height) p.vy *= -1;
+          ctx.beginPath();
+          ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
+          ctx.fillStyle = "rgba(255, 255, 255, 0.5)";
+          ctx.fill();
+        });
+        requestAnimationFrame(animateBackground);
+      }
+      animateBackground();
+
+      // Quiz Logic Script (Identical functionality, new shell)
+      document.addEventListener("DOMContentLoaded", () => {
+        const quizQuestions = [
+          {
+            question:
+              "What is the central theme of the Aliyah course as described in the introduction?",
+            options: [
+              "The history of modern politics in the Middle East",
+              "The return of the Jewish people to their ancestral homeland in Israel",
+              "A study of ancient biblical languages",
+              "The geography of the Mediterranean region",
+            ],
+            answer: 1,
+          },
+          {
+            question:
+              "According to the text, what is the primary biblical basis for Aliyah?",
+            options: [
+              "The Mosaic Law",
+              "The Davidic Kingdom",
+              "The Abrahamic Covenant",
+              "The Book of Revelation",
+            ],
+            answer: 2,
+          },
+          {
+            question:
+              "The Abrahamic Covenant's fulfillment is conditional on what?",
+            options: [
+              "The worthiness of the Jewish people",
+              "The political climate of the world",
+              "The unchanging character and purposes of God",
+              "The support of other nations",
+            ],
+            answer: 2,
+          },
+          {
+            question:
+              "According to the Apostle Paul in Romans 11, the restoration of Israel is described as being like what for the world?",
+            options: [
+              "A new beginning",
+              "A political shift",
+              "Life from the dead",
+              "A cultural revolution",
+            ],
+            answer: 2,
+          },
+          {
+            question: "Who were the pioneers of the First Aliyah?",
+            options: [
+              "Holocaust survivors",
+              "Refugees from Arab lands",
+              "Early Jewish immigrants in the late 19th century",
+              "Russian intellectuals in the 1970s",
+            ],
+            answer: 2,
+          },
+          {
+            question:
+              "What is the described role of Christians in the story of Aliyah?",
+            options: [
+              "Passive observers",
+              "Political opponents",
+              "Advocates, intercessors, and practical supporters",
+              "Solely financial donors",
+            ],
+            answer: 2,
+          },
+          {
+            question:
+              "The text suggests Christians should support Aliyah primarily out of a sense of:",
+            options: [
+              "Historical guilt",
+              "Political obligation",
+              "Duty and obligation",
+              "Love, appreciation, and recognition of spiritual debt",
+            ],
+            answer: 3,
+          },
+          {
+            question:
+              "The modern-day Aliyah is presented as a testament to what?",
+            options: [
+              "The success of international diplomacy",
+              "Human resilience and determination",
+              "God's faithfulness to His ancient promises",
+              "The economic power of the Jewish diaspora",
+            ],
+            answer: 2,
+          },
+          {
+            question:
+              "Besides biblical foundations, the dissertation will also explore:",
+            options: [
+              "Architectural styles in Jerusalem",
+              "The history of the Hebrew language",
+              "Historical expressions and contemporary challenges of Aliyah",
+              "The agricultural techniques of early pioneers",
+            ],
+            answer: 2,
+          },
+          {
+            question:
+              "Whose voices are specifically mentioned to be highlighted in the dissertation?",
+            options: [
+              "Famous Israeli politicians",
+              "Key Christian leaders and organizations involved in Aliyah",
+              "Renowned secular historians",
+              "United Nations officials",
+            ],
+            answer: 1,
+          },
+          {
+            question:
+              "The dissertation aims to demonstrate that Aliyah is a __________ part of God's redemptive plan.",
+            options: [
+              "peripheral and minor",
+              "recent and temporary",
+              "central and pivotal",
+              "controversial and debatable",
+            ],
+            answer: 2,
+          },
+          {
+            question:
+              "The return of the Jewish people to their homeland is said to set the stage for what climactic events?",
+            options: [
+              "A new era of global peace",
+              "The establishment of a world government",
+              "The coming of the Messiah and His kingdom",
+              "The final resolution of all political conflicts",
+            ],
+            answer: 2,
+          },
+          {
+            question:
+              "Which Old Testament prophet is quoted at the end of the introduction with the words 'The ransomed of the Lord shall return'?",
+            options: ["Jeremiah", "Ezekiel", "Daniel", "Isaiah"],
+            answer: 3,
+          },
+          {
+            question:
+              "What did God promise to give Abraham's descendants as an 'everlasting possession'?",
+            options: [
+              "Great wealth and riches",
+              "The land of Israel",
+              "Wisdom and knowledge",
+              "Dominion over all other nations",
+            ],
+            answer: 1,
+          },
+          {
+            question:
+              "The text describes the ingathering of Jewish immigrants as coming from where?",
+            options: [
+              "Only from Europe and Russia",
+              "Primarily from North America",
+              "The four corners of the earth",
+              "Neighboring Middle Eastern countries",
+            ],
+            answer: 2,
+          },
+        ];
+        const questionsWrapper = document.getElementById("questions-wrapper");
+        const quizForm = document.getElementById("quiz-form");
+        const submitBtn = document.getElementById("submit-btn");
+        const progressBar = document.getElementById("progress-bar");
+        const questionCounter = document.getElementById("question-counter");
+        const timerEl = document.getElementById("timer");
+        const resultsModal = document.getElementById("results-modal");
+        const scorePercentageEl = document.getElementById("score-percentage");
+        const gradeLevelEl = document.getElementById("grade-level");
+        const feedbackTextEl = document.getElementById("feedback-text");
+        const retryBtn = document.getElementById("retry-btn");
+        const certificateBtn = document.getElementById("certificate-btn");
+        const answerReviewEl = document.getElementById("answer-review");
+        const lockOverlay = document.getElementById("lock-overlay");
+        let userAnswers = new Array(quizQuestions.length).fill(null);
+        let timerInterval;
+        let seconds = 0;
+        let quizInProgress = true;
+        function renderQuestions() {
+          let questionsHTML = "";
+          quizQuestions.forEach((q, index) => {
+            questionsHTML += `<div class="question-block" style="animation-delay: ${
+              index * 0.1
+            }s;"><h2>${index + 1}. ${
+              q.question
+            }</h2><ul class="options-list" data-question-index="${index}">${q.options
+              .map((opt, i) => `<li data-option-index="${i}">${opt}</li>`)
+              .join("")}</ul></div>`;
+          });
+          questionsWrapper.innerHTML = questionsHTML;
+        }
+        function handleOptionSelect(e) {
+          if (!e.target.matches("li")) return;
+          const questionIndex = e.target.parentElement.dataset.questionIndex;
+          const optionIndex = e.target.dataset.optionIndex;
+          userAnswers[questionIndex] = parseInt(optionIndex);
+          const options = e.target.parentElement.querySelectorAll("li");
+          options.forEach((opt) => opt.classList.remove("selected"));
+          e.target.classList.add("selected");
+          updateProgress();
+          saveProgress();
+        }
+        function updateProgress() {
+          const answeredCount = userAnswers.filter((a) => a !== null).length;
+          const progress = (answeredCount / quizQuestions.length) * 100;
+          progressBar.style.width = `${progress}%`;
+          questionCounter.textContent = `Answered: ${answeredCount} / ${quizQuestions.length}`;
+          submitBtn.disabled = answeredCount !== quizQuestions.length;
+        }
+        function startTimer() {
+          timerInterval = setInterval(() => {
+            seconds++;
+            const mins = Math.floor(seconds / 60)
+              .toString()
+              .padStart(2, "0");
+            const secs = (seconds % 60).toString().padStart(2, "0");
+            timerEl.textContent = `Time: ${mins}:${secs}`;
+          }, 1000);
+        }
+        function showResults() {
+          quizInProgress = false;
+          clearInterval(timerInterval);
+          let score = 0;
+          userAnswers.forEach((answer, index) => {
+            if (answer === quizQuestions[index].answer) {
+              score++;
+            }
+          });
+          const percentage = Math.round((score / quizQuestions.length) * 100);
+          let currentPercent = 0;
+          const scoreAnimation = setInterval(() => {
+            if (currentPercent >= percentage) {
+              clearInterval(scoreAnimation);
+              scorePercentageEl.textContent = `${percentage}%`;
+            } else {
+              currentPercent++;
+              scorePercentageEl.textContent = `${currentPercent}%`;
+            }
+          }, 20);
+          let grade = "";
+          let feedback = "";
+          let gradeClass = "";
+          if (percentage >= 90) {
+            grade = "EXCELLENT";
+            feedback =
+              "Outstanding! You have a deep understanding of the material. A certificate is available.";
+            gradeClass = "grade-excellent";
+            certificateBtn.style.display = "inline-block";
+          } else if (percentage >= 75) {
+            grade = "GOOD";
+            feedback = "Great job! You have a solid grasp of the key concepts.";
+            gradeClass = "grade-good";
+          } else if (percentage >= 60) {
+            grade = "PASS";
+            feedback =
+              "You passed, but there's room for improvement. Review the incorrect answers to strengthen your knowledge.";
+            gradeClass = "grade-pass";
+          } else {
+            grade = "NEEDS IMPROVEMENT";
+            feedback =
+              "It looks like you had some trouble. Please review the material and your answers, then try the assessment again.";
+            gradeClass = "grade-improve";
+          }
+          gradeLevelEl.textContent = grade;
+          gradeLevelEl.className = gradeClass;
+          feedbackTextEl.textContent = feedback;
+          renderAnswerReview();
+          resultsModal.style.display = "flex";
+          clearProgress();
+        }
+        function renderAnswerReview() {
+          let reviewHTML = "";
+          quizQuestions.forEach((q, index) => {
+            const userAnswerIndex = userAnswers[index];
+            const correctAnswerIndex = q.answer;
+            const isCorrect = userAnswerIndex === correctAnswerIndex;
+            reviewHTML += `<div class="review-item ${
+              isCorrect ? "correct" : "incorrect"
+            }"><p class="review-question">${index + 1}. ${q.question}</p>${
+              isCorrect
+                ? `<p class="user-answer">Your answer: <span class="correct-answer">✓ ${q.options[userAnswerIndex]}</span></p>`
+                : `<p class="user-answer">Your answer: <span class="incorrect-answer">✗ ${q.options[userAnswerIndex]}</span></p><p class="correct-answer">Correct answer: ${q.options[correctAnswerIndex]}</p>`
+            }</div>`;
+          });
+          answerReviewEl.innerHTML = reviewHTML;
+        }
+        function saveProgress() {
+          const quizState = { answers: userAnswers, time: seconds };
+          localStorage.setItem("aliyahQuizProgress", JSON.stringify(quizState));
+        }
+        function loadProgress() {
+          const savedState = localStorage.getItem("aliyahQuizProgress");
+          if (savedState) {
+            if (
+              confirm(
+                "It looks like you have a quiz in progress. Would you like to resume?"
+              )
+            ) {
+              const { answers, time } = JSON.parse(savedState);
+              userAnswers = answers;
+              seconds = time;
+              userAnswers.forEach((answer, qIndex) => {
+                if (answer !== null) {
+                  const questionBlock = questionsWrapper.children[qIndex];
+                  const optionItem = questionBlock.querySelector(
+                    `li[data-option-index="${answer}"]`
+                  );
+                  if (optionItem) {
+                    optionItem.classList.add("selected");
+                  }
+                }
+              });
+              updateProgress();
+            } else {
+              clearProgress();
+            }
+          }
+        }
+        function clearProgress() {
+          localStorage.removeItem("aliyahQuizProgress");
+        }
+        window.onbeforeunload = (e) => {
+          if (quizInProgress) {
+            e.preventDefault();
+            e.returnValue = "";
+            return "Are you sure you want to leave? Your progress will be saved, but the timer will continue.";
+          }
+        };
+        history.pushState(null, document.title, location.href);
+        window.addEventListener("popstate", function (event) {
+          if (quizInProgress) {
+            history.pushState(null, document.title, location.href);
+            lockOverlay.style.display = "flex";
+            setTimeout(() => {
+              lockOverlay.style.display = "none";
+            }, 2000);
+          }
+        });
+        questionsWrapper.addEventListener("click", handleOptionSelect);
+        quizForm.addEventListener("submit", (e) => {
+          e.preventDefault();
+          showResults();
+        });
+        retryBtn.addEventListener("click", () => {
+          window.location.reload();
+        });
+        document.addEventListener("keydown", (e) => {
+          if (e.ctrlKey && e.key === "Enter") {
+            if (!submitBtn.disabled) {
+              showResults();
+            }
+          }
+        });
+        renderQuestions();
+        loadProgress();
+        startTimer();
+        setInterval(() => {
+          if (quizInProgress) {
+            saveProgress();
+          }
+        }, 30000);
+      });
+    </script>
+  </body>
+</html>
