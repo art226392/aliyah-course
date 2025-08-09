@@ -1,97 +1,136 @@
-/**
- * Unified Animated Background for Aliyah Course - Light Theme
- *
- * This script creates a subtle, animated grain texture and a soft,
- * moving gradient for a nuanced and sophisticated background.
- */
-document.addEventListener("DOMContentLoaded", () => {
-  // Find the canvas element on the page.
-  const canvas = document.getElementById("bg-canvas");
-  // If there's no canvas on the page, stop the script.
-  if (!canvas) return;
+// background.js
 
-  const ctx = canvas.getContext("2d");
+(function () {
+  // ===== One-time disclaimer =====
+  document.addEventListener("DOMContentLoaded", () => {
+    try {
+      if (!localStorage.getItem("aliyah_disclaimer_ack")) {
+        const overlay = document.createElement("div");
+        overlay.setAttribute("id", "disclaimer-overlay");
+        overlay.setAttribute(
+          "style",
+          `
+          position: fixed; inset: 0; display: grid; place-items: center;
+          background: rgba(0,0,0,0.55); z-index: 9999; padding: 16px;
+        `
+        );
 
-  // Set initial canvas dimensions and resize with the window.
-  let width = (canvas.width = window.innerWidth);
-  let height = (canvas.height = window.innerHeight);
-  let noisePattern;
+        const box = document.createElement("div");
+        box.setAttribute("role", "dialog");
+        box.setAttribute("aria-modal", "true");
+        box.setAttribute(
+          "style",
+          `
+          max-width: 560px; width: 100%; background: #fff; border-radius: 12px;
+          box-shadow: 0 10px 30px rgba(0,0,0,0.2); padding: 20px; line-height: 1.5;
+          font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+        `
+        );
 
-  /**
-   * Creates a small, off-screen canvas with a noise pattern.
-   * This pattern is then used to fill the main canvas, which is more
-   * performant than generating noise for the full screen every frame.
-   */
-  function createNoise() {
-    const noiseCanvas = document.createElement("canvas");
-    const noiseCtx = noiseCanvas.getContext("2d");
-    const noiseSize = 100; // Size of the noise tile
-    noiseCanvas.width = noiseSize;
-    noiseCanvas.height = noiseSize;
+        const h = document.createElement("h2");
+        h.textContent = "Quick note before you start";
+        h.setAttribute("style", "margin: 0 0 10px; font-size: 20px;");
 
-    const imageData = noiseCtx.createImageData(noiseSize, noiseSize);
-    const buffer = new Uint32Array(imageData.data.buffer);
-    const len = buffer.length;
+        const p = document.createElement("p");
+        p.textContent =
+          "For best understanding, please watch the full lecture videos. The notes are support material and do not replace the video content.";
 
-    for (let i = 0; i < len; i++) {
-      // Generate a random grayscale value for the noise.
-      // The alpha is very low to make it extremely subtle.
-      if (Math.random() > 0.5) {
-        buffer[i] = 0x0a000000; // A very faint black
+        const btn = document.createElement("button");
+        btn.textContent = "Got it";
+        btn.setAttribute(
+          "style",
+          `
+          margin-top: 14px; padding: 10px 14px; border: 0; border-radius: 8px;
+          background: #0f6; cursor: pointer; font-weight: 600;
+        `
+        );
+        btn.addEventListener("click", () => {
+          localStorage.setItem("aliyah_disclaimer_ack", "1");
+          overlay.remove();
+        });
+
+        box.appendChild(h);
+        box.appendChild(p);
+        box.appendChild(btn);
+        overlay.appendChild(box);
+        document.body.appendChild(overlay);
       }
+    } catch (_) {
+      /* ignore storage issues */
     }
-    noiseCtx.putImageData(imageData, 0, 0);
-    noisePattern = ctx.createPattern(noiseCanvas, "repeat");
-  }
-
-  // Debounce resize handler for performance
-  let resizeTimeout;
-  window.addEventListener("resize", () => {
-    clearTimeout(resizeTimeout);
-    resizeTimeout = setTimeout(() => {
-      width = canvas.width = window.innerWidth;
-      height = canvas.height = window.innerHeight;
-    }, 100);
   });
 
-  /**
-   * The main animation loop.
-   * Clears the canvas, draws the gradient and noise, and requests the next frame.
-   */
-  function animateBackground() {
-    // Clear the canvas for the next frame.
-    ctx.clearRect(0, 0, width, height);
+  // ===== Quiz timer (12 minutes) =====
+  const QUIZ_LIMIT_SECONDS = 12 * 60;
 
-    // --- Soft Gradient ---
-    // Creates a large, soft radial gradient that moves very slowly across the screen.
-    const gradient = ctx.createRadialGradient(
-      // The gradient's center moves in a slow, wide circular path.
-      width / 2 + Math.sin(Date.now() * 0.00005) * width * 0.4,
-      height / 2 + Math.cos(Date.now() * 0.00005) * height * 0.4,
-      0,
-      width / 2,
-      height / 2,
-      Math.max(width, height)
-    );
-    // Colors are very light shades of off-white and blue to add depth.
-    gradient.addColorStop(0, "rgba(230, 240, 255, 0.5)"); // A faint, cool blueish hue
-    gradient.addColorStop(1, "rgba(248, 249, 250, 0)"); // Fades to transparent
-
-    ctx.fillStyle = gradient;
-    ctx.fillRect(0, 0, width, height);
-
-    // --- Noise Texture ---
-    // Fill the canvas with the pre-generated noise pattern for a textured feel.
-    if (noisePattern) {
-      ctx.fillStyle = noisePattern;
-      ctx.fillRect(0, 0, width, height);
-    }
-
-    // Request the next animation frame to create a smooth loop.
-    requestAnimationFrame(animateBackground);
+  function mmss(totalSeconds) {
+    const m = Math.floor(totalSeconds / 60)
+      .toString()
+      .padStart(2, "0");
+    const s = Math.floor(totalSeconds % 60)
+      .toString()
+      .padStart(2, "0");
+    return `${m}:${s}`;
   }
 
-  // Initialize and start the animation.
-  createNoise();
-  animateBackground();
-});
+  function finishQuiz(reason) {
+    try {
+      if (typeof window.computeResults === "function") {
+        window.computeResults();
+      }
+    } catch (_) {
+      /* best effort */
+    }
+
+    try {
+      const msg = document.getElementById("result-message");
+      if (msg && reason === "time") {
+        msg.textContent = "Time is up. Your answers were submitted.";
+      }
+    } catch (_) {}
+
+    const map = {
+      "/quiz1.html": "lecture2.html",
+      "/quiz2.html": "lecture3.html",
+      "/quiz3.html": "lecture4.html",
+    };
+
+    const fallback = "index.html";
+    const next = window.nextLecture || map[location.pathname] || fallback;
+
+    setTimeout(() => {
+      location.href = next;
+    }, 1500);
+  }
+
+  function startQuizTimer() {
+    const display = document.getElementById("timer");
+    if (!display) return;
+
+    let remaining = QUIZ_LIMIT_SECONDS;
+    display.textContent = mmss(remaining);
+    display.setAttribute("aria-live", "polite");
+
+    const t = setInterval(() => {
+      remaining -= 1;
+      if (remaining <= 0) {
+        clearInterval(t);
+        display.textContent = "00:00";
+        finishQuiz("time");
+      } else {
+        display.textContent = mmss(remaining);
+      }
+    }, 1000);
+
+    const finishBtn = document.getElementById("finishBtn");
+    if (finishBtn) {
+      finishBtn.addEventListener("click", () => finishQuiz("manual"));
+    }
+  }
+
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", startQuizTimer);
+  } else {
+    startQuizTimer();
+  }
+})();

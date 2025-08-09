@@ -68,7 +68,7 @@
         </div>
         <div class="stats-container">
           <div id="question-counter">Answered: 0 / 15</div>
-          <div id="timer">Time Left: 08:00</div>
+          <div id="timer">Time Left: 12:00</div>
         </div>
       </header>
 
@@ -96,9 +96,7 @@
           >
           <button id="retry-btn" class="nav-btn secondary">Retry Quiz</button>
           <!-- This button is hidden by default and shown on pass -->
-          <a href="#" id="next-lecture-btn" class="nav-btn"
-            >Finish Course (For Now)</a
-          >
+          <a href="#" id="next-lecture-btn" class="nav-btn">Next Lecture →</a>
         </div>
       </div>
     </div>
@@ -281,7 +279,7 @@
         // --- STATE VARIABLES ---
         let userAnswers = new Array(quizQuestions.length).fill(null);
         let timerInterval;
-        let timeLeft = 480; // 8 minutes in seconds
+        let timeLeft = 720; // 12 minutes in seconds
         let quizInProgress = true;
 
         // --- FIREWORKS ANIMATION ---
@@ -495,7 +493,7 @@
         }
 
         /**
-         * Starts the 8-minute countdown timer.
+         * Starts the 12-minute countdown timer.
          */
         function startTimer() {
           timerInterval = setInterval(() => {
@@ -536,9 +534,9 @@
             gradeLevelEl.textContent = "PASS";
             gradeLevelEl.className = "grade-pass celebrating";
             feedbackTextEl.textContent =
-              "Congratulations! You have successfully completed the course assessments.";
+              "Excellent work! You have mastered the concepts of God's plan through Israel. You may proceed to the next lecture.";
             nextLectureBtn.style.display = "inline-block"; // Show button
-            nextLectureBtn.href = "#"; // No next lecture yet
+            nextLectureBtn.href = "lecture3.html"; // FIXED: Now leads to lecture 3
             nextLectureBtn.classList.add("celebrate");
 
             // Start fireworks animation
