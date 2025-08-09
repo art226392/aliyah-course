@@ -1,0 +1,465 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Aliyah Course - Assessment 4</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="style.css" />
+    <style>
+      /* Slightly different accent to signal a new module while staying subtle */
+      header h1 span.badge { 
+        display: inline-block; 
+        font-size: 0.9rem; 
+        font-weight: 600; 
+        background: rgba(37, 99, 235, 0.08); 
+        border: 1px solid rgba(37, 99, 235, 0.15); 
+        padding: 0.25rem 0.5rem; 
+        border-radius: 999px; 
+        vertical-align: middle;
+        margin-left: 0.5rem;
+      }
+    </style>
+  </head>
+  <body>
+    <canvas id="bg-canvas"></canvas>
+
+    <div class="container">
+      <header>
+        <img src="cropped-ICEJ-Logo-Emblem_blue.png" alt="Course Logo" class="header-logo" />
+        <div class="header-text">
+          <h1>Assessment 4 <span class="badge">8 minutes</span></h1>
+          <h2>Aliyah and the Messianic Kingdom</h2>
+        </div>
+        <div class="progress-bar-container">
+          <div class="progress-bar" id="progress-bar"></div>
+        </div>
+        <div class="stats-container">
+          <div id="question-counter">Answered: 0 / 15</div>
+          <div id="timer">Time Left: 08:00</div>
+        </div>
+      </header>
+
+      <form id="quiz-form">
+        <div id="questions-wrapper"></div>
+        <button type="submit" id="submit-btn" disabled>Submit Assessment</button>
+      </form>
+    </div>
+
+    <div id="results-modal" class="modal-overlay">
+      <div class="modal-content">
+        <h2>Assessment Complete</h2>
+        <div id="score-percentage">0%</div>
+        <div id="grade-level"></div>
+        <p id="feedback-text"></p>
+        <div id="answer-review"></div>
+        <div class="modal-buttons">
+          <a href="lecture4.html" class="nav-btn secondary">Return to Lecture</a>
+          <button id="retry-btn" class="nav-btn outlined">Retry</button>
+          <a id="next-lecture-btn" href="#" class="nav-btn" style="display:none;">Continue</a>
+        </div>
+        <canvas id="fireworks"></canvas>
+      </div>
+    </div>
+
+    <script>
+      document.addEventListener("DOMContentLoaded", () => {
+        const questions = [
+          {
+            question: "In Ezekiel 37:12–14, what does God promise to do for the people of Israel?",
+            options: [
+              "Destroy their cities to purify the land",
+              "Bring them up from their graves and return them to their land",
+              "Send them back to Babylon",
+              "Give them a new temple before returning"
+            ],
+            answer: 1
+          },
+          {
+            question: "According to Jeremiah 23:5–8, how is the future king from David's line described?",
+            options: [
+              "A prophet without authority",
+              "A priest from the tribe of Levi",
+              "A righteous Branch who reigns with justice",
+              "A foreign ruler who conquers Jerusalem"
+            ],
+            answer: 2
+          },
+          {
+            question: "Isaiah 11:11–12 speaks of the Lord gathering His people again. What makes this gathering distinct?",
+            options: [
+              "It is limited to Judea and Samaria",
+              "It is global in scope, reaching distant lands",
+              "It only includes those from Babylon",
+              "It occurs before the first exile"
+            ],
+            answer: 1
+          },
+          {
+            question: "Amos 9:14–15 promises permanence after return. What is the key promise?",
+            options: [
+              "They will never again be uprooted from their land",
+              "They will rebuild the Tower of Babel",
+              "They will rule the nations immediately",
+              "They will forget the covenant with David"
+            ],
+            answer: 0
+          },
+          {
+            question: "Zechariah 8:7–8 links regathering with God's presence. Where will He dwell?",
+            options: [
+              "In Samaria",
+              "In the wilderness of Zin",
+              "In Jerusalem among His people",
+              "In Damascus"
+            ],
+            answer: 2
+          },
+          {
+            question: "In Matthew 24:31, who gathers the elect at the return of the Son of Man?",
+            options: [
+              "The elders of Israel",
+              "Angels sent by the Son of Man",
+              "Roman soldiers",
+              "The Sanhedrin"
+            ],
+            answer: 1
+          },
+          {
+            question: "Jeremiah 31:31–34 promises a new covenant. Where will God's law be placed?",
+            options: [
+              "On stone tablets kept in the ark",
+              "In the courts of the temple",
+              "On their hearts",
+              "On city gates"
+            ],
+            answer: 2
+          },
+          {
+            question: "Ezekiel 36:24–28 lists the results of regathering. Which outcome is mentioned?",
+            options: [
+              "A new heart and a new spirit within the people",
+              "Immediate military dominance",
+              "The end of prophecy",
+              "A return to wilderness living"
+            ],
+            answer: 0
+          },
+          {
+            question: "According to Romans 11:25–27, how long does Israel's hardening last?",
+            options: [
+              "Forever",
+              "Until the fullness of the Gentiles comes in",
+              "Until the next Jubilee year",
+              "Only for seventy years"
+            ],
+            answer: 1
+          },
+          {
+            question: "Isaiah 2:2–4 pictures nations streaming to learn God’s ways. What follows from this?",
+            options: [
+              "Increased taxation",
+              "Endless debates",
+              "The cessation of war",
+              "The fall of Jerusalem"
+            ],
+            answer: 2
+          },
+          {
+            question: "What theme in Isaiah 60 signals the effect of Israel's renewal on the world?",
+            options: [
+              "Jerusalem shines and nations come with their resources",
+              "Jerusalem hides from the nations",
+              "The temple is closed to foreigners",
+              "Only the tribe of Judah prospers"
+            ],
+            answer: 0
+          },
+          {
+            question: "Zechariah 8:20–23 describes people from many languages seeking the Lord. What motivates them?",
+            options: [
+              "Fear of exile",
+              "Rumors of a new empire",
+              "Hearing that God is with the Jewish people",
+              "Economic sanctions"
+            ],
+            answer: 2
+          },
+          {
+            question: "According to the lecture, why is Aliyah more than a political event?",
+            options: [
+              "It improves trade routes",
+              "It fulfills spiritual promises tied to the Messiah's reign",
+              "It guarantees immediate peace treaties",
+              "It replaces temple worship"
+            ],
+            answer: 1
+          },
+          {
+            question: "What connection does the lecture make between restoration and Israel’s calling to the nations?",
+            options: [
+              "Restoration ends Israel’s calling",
+              "Restoration enables Israel to be a light to the nations",
+              "Restoration isolates Israel from all nations",
+              "Restoration cancels prior covenants"
+            ],
+            answer: 1
+          },
+          {
+            question: "Which statement best summarizes the New Testament view presented in the lecture?",
+            options: [
+              "The promises to Israel are symbolic only",
+              "The Messiah gathers His people and brings renewal",
+              "The regathering happened once and is irrelevant now",
+              "Only Gentiles benefit from the new covenant"
+            ],
+            answer: 1
+          }
+        ];
+
+        const form = document.getElementById("quiz-form");
+        const wrapper = document.getElementById("questions-wrapper");
+        const submitBtn = document.getElementById("submit-btn");
+        const counterEl = document.getElementById("question-counter");
+        const timerEl = document.getElementById("timer");
+        const progressBar = document.getElementById("progress-bar");
+
+        const resultsModal = document.getElementById("results-modal");
+        const scoreEl = document.getElementById("score-percentage");
+        const gradeLevelEl = document.getElementById("grade-level");
+        const feedbackTextEl = document.getElementById("feedback-text");
+        const answerReviewEl = document.getElementById("answer-review");
+        const retryBtn = document.getElementById("retry-btn");
+        const nextLectureBtn = document.getElementById("next-lecture-btn");
+
+        let selected = new Array(questions.length).fill(null);
+
+        
+        function renderQuestions() {
+          let htmlOut = "";
+          questions.forEach((q, idx) => {
+            htmlOut += `
+              <div class="question-block">
+                <h2>Q${idx + 1}. ${q.question}</h2>
+                <ul class="options-list" data-q="${idx}">
+                  ${q.options.map((opt, i) => `<li>
+                    <label>
+                      <input type="radio" name="q${idx}" value="${i}" />
+                      <span>${opt}</span>
+                    </label>
+                  </li>`).join("")}
+                </ul>
+              </div>`;
+          });
+          wrapper.innerHTML = htmlOut;
+
+          wrapper.addEventListener("change", (e) => {
+            if (e.target && e.target.matches("input[type='radio']")) {
+              const qIndex = parseInt(e.target.name.replace("q", ""), 10);
+              const val = parseInt(e.target.value, 10);
+              if (selected[qIndex] === null) updateProgress();
+              selected[qIndex] = val;
+              updateCounter();
+              if (selected.every(v => v !== null)) submitBtn.disabled = false;
+            }
+          });
+        }
+
+
+        function updateCounter() {
+          const answered = selected.filter(v => v !== null).length;
+          counterEl.textContent = `Answered: ${answered} / ${questions.length}`;
+        }
+
+        function updateProgress() {
+          const answered = selected.filter(v => v !== null).length;
+          const pct = Math.round((answered / questions.length) * 100);
+          progressBar.style.width = pct + "%";
+        }
+
+        // 8 minute timer
+        let timeLeft = 480;
+        function startTimer() {
+          timerEl.textContent = "Time Left: " + formatTime(timeLeft);
+          const interval = setInterval(() => {
+            timeLeft--;
+            if (timeLeft <= 0) {
+              clearInterval(interval);
+              timerEl.textContent = "Time Left: 00:00";
+              showResults();
+            } else {
+              timerEl.textContent = "Time Left: " + formatTime(timeLeft);
+            }
+          }, 1000);
+        }
+
+        function formatTime(seconds) {
+          const m = String(Math.floor(seconds / 60)).padStart(2, "0");
+          const s = String(seconds % 60).padStart(2, "0");
+          return m + ":" + s;
+        }
+
+        function showResults() {
+          const answers = selected.map((v, i) => v === null ? -1 : v);
+          let correct = 0;
+          const blocks = wrapper.querySelectorAll(".question-block");
+          blocks.forEach((block, i) => {
+            const chosen = answers[i];
+            const ans = questions[i].answer;
+            const opts = block.querySelectorAll("li");
+            opts.forEach((li, optIndex) => {
+              li.classList.remove("correct", "incorrect");
+              if (optIndex === ans) li.classList.add("correct");
+              if (chosen !== -1 && optIndex === chosen && chosen !== ans) li.classList.add("incorrect");
+            });
+            if (chosen === ans) correct++;
+          });
+
+          const percent = Math.round((correct / questions.length) * 100);
+          scoreEl.textContent = percent + "%";
+
+          if (percent >= 70) {
+            gradeLevelEl.textContent = "Passed";
+            gradeLevelEl.className = "grade-pass";
+            feedbackTextEl.textContent = "Good work. You have a firm grasp of the material. Continue to the next step.";
+            nextLectureBtn.style.display = "inline-block";
+            nextLectureBtn.href = "thank-you.html";
+            nextLectureBtn.classList.add("celebrate");
+            setTimeout(() => {
+              const fireworks = new Fireworks();
+              fireworks.start();
+            }, 500);
+          } else {
+            gradeLevelEl.textContent = "Unfortunately you didn’t pass";
+            gradeLevelEl.className = "grade-fail";
+            feedbackTextEl.textContent = "Review the lecture and try again. A score of 70% is needed.";
+            nextLectureBtn.style.display = "none";
+          }
+
+          // Build answer review
+          answerReviewEl.innerHTML = "";
+          questions.forEach((q, i) => {
+            const chosen = selected[i];
+            const correctIndex = q.answer;
+            const chosenText = chosen === null ? "No answer" : q.options[chosen];
+            const correctText = q.options[correctIndex];
+            const reviewItem = document.createElement("div");
+            reviewItem.className = "answer-review-item";
+            reviewItem.innerHTML = `
+              <strong>Q\${i + 1}:</strong> \${q.question}<br/>
+              <em>Your answer:</em> \${chosenText}<br/>
+              <em>Correct answer:</em> \${correctText}
+            `;
+            answerReviewEl.appendChild(reviewItem);
+          });
+
+          resultsModal.classList.add("show");
+          resultsModal.style.display = "flex";
+          window.scrollTo({ top: 0, behavior: "smooth" });
+        }
+
+        // Minimal fireworks reused from previous quizzes
+        class Fireworks {
+          constructor() {
+            this.canvas = document.getElementById("fireworks");
+            this.ctx = this.canvas.getContext("2d");
+            this.resize();
+            window.addEventListener("resize", () => this.resize());
+            this.particles = [];
+            this.rockets = [];
+            this.animationId = null;
+          }
+          resize() {
+            this.canvas.width = window.innerWidth;
+            this.canvas.height = window.innerHeight;
+          }
+          start() {
+            for (let i = 0; i < 8; i++) {
+              this.rockets.push({
+                x: Math.random() * this.canvas.width,
+                y: this.canvas.height + Math.random() * 80,
+                vx: (Math.random() - 0.5) * 1.2,
+                vy: -6 - Math.random() * 2,
+                color: "rgba(37, 99, 235, 0.9)",
+                life: 70 + Math.random() * 30
+              });
+            }
+            const loop = () => {
+              this.update();
+              this.draw();
+              this.animationId = requestAnimationFrame(loop);
+            };
+            loop();
+            setTimeout(() => this.stop(), 5000);
+          }
+          stop() {
+            const end = () => {
+              if (this.particles.length || this.rockets.length) {
+                this.update();
+                this.draw();
+                requestAnimationFrame(end);
+              } else {
+                cancelAnimationFrame(this.animationId);
+                this.ctx.clearRect(0,0,this.canvas.width,this.canvas.height);
+              }
+            };
+            end();
+          }
+          update() {
+            this.ctx.globalCompositeOperation = "lighter";
+            this.ctx.fillStyle = "rgba(0, 0, 0, 0.05)";
+            this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
+            // rockets
+            for (let i = this.rockets.length - 1; i >= 0; i--) {
+              const r = this.rockets[i];
+              r.x += r.vx; r.y += r.vy; r.life--;
+              if (r.life < 40) r.vy += 0.12;
+              if (r.life <= 0 || r.y < this.canvas.height * 0.25) {
+                for (let j = 0; j < 60; j++) {
+                  this.particles.push({
+                    x: r.x, y: r.y,
+                    vx: (Math.random() - 0.5) * 3.2,
+                    vy: (Math.random() - 0.5) * 3.2,
+                    alpha: 1,
+                    color: "rgba(37, 99, 235, 0.9)"
+                  });
+                }
+                this.rockets.splice(i,1);
+              }
+            }
+            // particles
+            for (let i = this.particles.length - 1; i >= 0; i--) {
+              const p = this.particles[i];
+              p.x += p.vx; p.y += p.vy; p.alpha -= 0.02;
+              if (p.alpha <= 0) this.particles.splice(i,1);
+            }
+          }
+          draw() {
+            for (const p of this.particles) {
+              this.ctx.fillStyle = p.color.replace("0.9", String(p.alpha));
+              this.ctx.beginPath();
+              this.ctx.arc(p.x, p.y, 2, 0, Math.PI * 2);
+              this.ctx.fill();
+            }
+          }
+        }
+
+        form.addEventListener("submit", (e) => {
+          e.preventDefault();
+          showResults();
+        });
+        retryBtn.addEventListener("click", () => {
+          window.location.reload();
+        });
+
+        renderQuestions();
+        startTimer();
+      });
+    </script>
+  </body>
+</html>

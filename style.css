@@ -4,28 +4,42 @@ Unified Stylesheet for Aliyah Online Course - Light Theme
 ==================================================
 */
 
-/* ---------------------------------
-Root Variables & General Setup
----------------------------------
-- Defines the color palette for a consistent light theme.
-- Sets up the base font, background, and text colors.
-*/
 :root {
-  --bg-color: #f8f9fa;
+  --bg-accent-1: rgba(216, 232, 255, 0.45);
+  --bg-accent-2: rgba(240, 248, 255, 0.85);
+  --bg-accent-3: rgba(208, 224, 255, 0.35);
+
+  /* Light sky-tinted base */
+  --bg-color: #f7fbff;
   --card-bg: rgba(255, 255, 255, 0.85);
   --border-color: #dee2e6;
-  --text-color: #212529;
-  --text-muted: #6c757d;
-  --primary-color: #007bff;
-  --primary-hover: #0069d9;
-  --correct-color: #198754;
-  --incorrect-color: #dc3545;
-  --shadow-color: rgba(0, 0, 0, 0.075);
+  --text-color: #111827;
+  --text-muted: #6b7280;
+
+  /* Modern primary palette */
+  --primary-color: #2563eb;        /* Indigo-500 */
+  --primary-hover: #1d4ed8;        /* Indigo-600 */
+  --primary-pressed: #1e40af;      /* Indigo-700 */
+
+  --correct-color: #10b981;
+  --incorrect-color: #ef4444;
+  --shadow-color: rgba(2, 6, 23, 0.08);
+
+  /* Button gradients */
+  --btn-grad-start: #3b82f6;
+  --btn-grad-end: #2563eb;
+  --btn-glow: rgba(37, 99, 235, 0.35);
 }
 
 body {
   font-family: "Poppins", sans-serif;
   background-color: var(--bg-color);
+  /* Fallback subtle sky gradient under the animated canvas */
+  background-image:
+    radial-gradient(1200px 800px at 20% 0%, var(--bg-accent-1), rgba(255, 255, 255, 0)),
+    radial-gradient(800px 600px at 90% 10%, var(--bg-accent-3), rgba(255, 255, 255, 0)),
+    linear-gradient(180deg, #f7fbff 0%, #ffffff 100%);
+  background-attachment: fixed;
   color: var(--text-color);
   margin: 0;
   padding: 2rem;
@@ -34,31 +48,23 @@ body {
   justify-content: center;
   align-items: flex-start;
   min-height: 100vh;
-  overflow-x: hidden; /* Prevent horizontal scroll */
+  overflow-x: hidden;
 }
 
-/* ---------------------------------
-Animated Background Canvas
----------------------------------
-- Positions the canvas behind all other content.
-*/
+/* Animated Background Canvas */
 #bg-canvas {
   position: fixed;
-  top: 0;
-  left: 0;
+  inset: 0;
   width: 100%;
   height: 100%;
   z-index: -1;
-  opacity: 0.6; /* Make the effect subtle */
+  opacity: 0.6;
+  pointer-events: none;
 }
 
-/* ---------------------------------
-Main Content Container
----------------------------------
-- A single container style for both lectures and quizzes.
-*/
+/* Main Content Container */
 .container {
-  position: relative; /* Needed to be on top of the canvas */
+  position: relative;
   z-index: 1;
   width: 100%;
   max-width: 900px;
@@ -66,29 +72,18 @@ Main Content Container
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
   border: 1px solid var(--border-color);
-  border-radius: 16px;
+  border-radius: 18px;
   padding: 2.5rem;
-  box-shadow: 0 8px 32px var(--shadow-color);
-  animation: fadeIn 1s ease-out;
+  box-shadow: 0 20px 60px var(--shadow-color);
+  animation: fadeIn 0.9s ease-out;
 }
 
 @keyframes fadeIn {
-  from {
-    opacity: 0;
-    transform: translateY(20px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
+  from { opacity: 0; transform: translateY(20px) scale(0.98); }
+  to   { opacity: 1; transform: translateY(0) scale(1); }
 }
 
-/* ---------------------------------
-Header & Typography
----------------------------------
-- Consistent header for all pages.
-- Includes logo and titles.
-*/
+/* Header & Typography */
 header {
   text-align: center;
   margin-bottom: 2rem;
@@ -97,22 +92,25 @@ header {
 }
 
 .header-logo {
-  width: 80px;
+  width: 84px;
   height: auto;
-  margin-bottom: 1.5rem;
+  margin-bottom: 1.25rem;
+  filter: drop-shadow(0 8px 24px rgba(2, 6, 23, 0.10));
 }
 
 header h1 {
-  font-size: clamp(2.5rem, 5vw, 3.5rem);
+  font-size: clamp(2.5rem, 5vw, 3.25rem);
   font-weight: 700;
+  letter-spacing: -0.02em;
   margin: 0;
   color: var(--text-color);
 }
 
 header h2 {
-  font-size: 1.2rem;
-  font-weight: 400;
+  font-size: 1.15rem;
+  font-weight: 500;
   color: var(--text-muted);
+  margin-top: 0.25rem;
 }
 
 .author-credit {
@@ -122,31 +120,29 @@ header h2 {
   margin-top: 0.5rem;
 }
 
-/* ---------------------------------
-Lecture-Specific Styles
----------------------------------
-*/
+/* Lecture */
 .lecture-text p {
-  font-size: 1.05rem;
-  margin-bottom: 1.5rem;
-  color: #343a40;
+  font-size: 1.06rem;
+  margin-bottom: 1.35rem;
+  color: #1f2937;
 }
 
 .lecture-text h3 {
-  font-size: 1.5rem;
-  font-weight: 600;
+  font-size: 1.55rem;
+  font-weight: 700;
   color: var(--primary-color);
-  margin-top: 2.5rem;
+  margin-top: 2.25rem;
   margin-bottom: 1rem;
+  letter-spacing: -0.01em;
 }
 
 .video-container {
-  margin: 2.5rem 0;
-  border-radius: 12px;
+  margin: 2.25rem 0;
+  border-radius: 14px;
   overflow: hidden;
   position: relative;
   border: 1px solid var(--border-color);
-  box-shadow: 0 4px 12px var(--shadow-color);
+  box-shadow: 0 12px 30px rgba(2, 6, 23, 0.06);
 }
 
 .video-container iframe {
@@ -157,10 +153,7 @@ Lecture-Specific Styles
   border: none;
 }
 
-/* ---------------------------------
-Navigation Buttons
----------------------------------
-*/
+/* Navigation Buttons – modern, glassy, elevated */
 .navigation-buttons {
   display: flex;
   justify-content: center;
@@ -173,52 +166,84 @@ Navigation Buttons
 
 .nav-btn {
   display: inline-block;
-  background: var(--primary-color);
+  position: relative;
+  background: linear-gradient(180deg, var(--btn-grad-start), var(--btn-grad-end));
   color: #fff;
-  padding: 0.9rem 2.5rem;
+  padding: 0.95rem 2.5rem;
   font-size: 1rem;
-  font-weight: 600;
+  font-weight: 700;
+  letter-spacing: 0.01em;
   text-decoration: none;
-  border-radius: 8px;
-  transition: all 0.3s ease;
-  border: 1px solid var(--primary-color);
+  border-radius: 9999px;
+  border: 0;
+  box-shadow:
+    0 10px 24px var(--btn-glow),
+    inset 0 1px 0 rgba(255, 255, 255, 0.35);
+  transition: transform 0.18s ease, box-shadow 0.18s ease, filter 0.18s ease;
 }
 
-.nav-btn.secondary {
-  background: #e9ecef;
-  border-color: #dee2e6;
-  color: var(--text-color);
+.nav-btn::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: linear-gradient(180deg, rgba(255,255,255,0.25), rgba(255,255,255,0));
+  pointer-events: none;
 }
 
 .nav-btn:hover {
-  background: var(--primary-hover);
-  border-color: var(--primary-hover);
+  transform: translateY(-1px) scale(1.01);
   transform: translateY(-2px);
+  box-shadow:
+    0 14px 32px var(--btn-glow),
+    inset 0 1px 0 rgba(255, 255, 255, 0.45);
+  filter: saturate(1.05);
+}
+
+.nav-btn:active {
+  transform: translateY(0);
+  box-shadow:
+    0 8px 18px var(--btn-glow),
+    inset 0 1px 0 rgba(255, 255, 255, 0.35);
+  background: linear-gradient(180deg, var(--primary-hover), var(--primary-pressed));
+}
+
+.nav-btn:focus-visible {
+  outline: none;
+  box-shadow:
+    0 0 0 4px rgba(37, 99, 235, 0.12),
+    0 10px 24px var(--btn-glow),
+    inset 0 1px 0 rgba(255, 255, 255, 0.35);
+}
+
+/* Secondary button: soft, glassy */
+.nav-btn.secondary {
+  background: rgba(255, 255, 255, 0.7);
+  color: var(--text-color);
+  border: 1px solid rgba(2, 6, 23, 0.08);
+  box-shadow: 0 8px 18px rgba(2, 6, 23, 0.06), inset 0 1px 0 rgba(255,255,255,0.6);
 }
 
 .nav-btn.secondary:hover {
-  background: #ced4da;
-  border-color: #ced4da;
+  background: rgba(255, 255, 255, 0.9);
+  transform: translateY(-2px);
 }
 
-/* ---------------------------------
-Quiz-Specific Styles
----------------------------------
-*/
+/* Quiz Styles */
 .progress-bar-container {
   width: 100%;
-  background-color: #e9ecef;
-  border-radius: 10px;
-  margin-top: 1.5rem;
-  height: 10px;
+  background-color: #edf2f7;
+  border-radius: 12px;
+  margin-top: 1.4rem;
+  height: 12px;
   border: 1px solid var(--border-color);
 }
 
 .progress-bar {
   width: 0%;
   height: 100%;
-  background: var(--primary-color);
-  border-radius: 10px;
+  background: linear-gradient(90deg, var(--btn-grad-start), var(--btn-grad-end));
+  border-radius: 12px;
   transition: width 0.5s ease-in-out;
 }
 
@@ -234,15 +259,16 @@ Quiz-Specific Styles
   margin-bottom: 1.5rem;
   padding: 1.5rem;
   background: #fff;
-  border-radius: 12px;
+  border-radius: 14px;
   border: 1px solid var(--border-color);
+  box-shadow: 0 8px 24px rgba(2, 6, 23, 0.04);
 }
 
 .question-block h2 {
-  font-size: 1.2rem;
+  font-size: 1.15rem;
   margin-bottom: 1rem;
   color: var(--text-color);
-  font-weight: 500;
+  font-weight: 600;
 }
 
 .options-list {
@@ -255,59 +281,58 @@ Quiz-Specific Styles
   background-color: #fff;
   margin: 0.7rem 0;
   padding: 1rem;
-  border-radius: 8px;
+  border-radius: 12px;
   border: 1px solid var(--border-color);
   cursor: pointer;
-  transition: all 0.3s ease;
+  transition: transform 0.18s ease, box-shadow 0.18s ease, border-color 0.18s ease, background 0.18s ease;
 }
 
 .options-list li:hover {
   border-color: var(--primary-color);
-  background-color: #e7f1ff;
+  background: #eef5ff;
+  transform: translateY(-1px);
+  box-shadow: 0 10px 20px rgba(37, 99, 235, 0.08);
 }
 
 .options-list li.selected {
-  background-color: var(--primary-color);
-  border-color: var(--primary-color);
   color: #fff;
-  font-weight: 600;
+  background: linear-gradient(180deg, var(--btn-grad-start), var(--btn-grad-end));
+  border-color: transparent;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.4);
+  font-weight: 700;
 }
 
 #submit-btn {
   display: block;
   width: 100%;
   padding: 1rem;
-  font-size: 1.2rem;
-  font-weight: 600;
+  font-size: 1.15rem;
+  font-weight: 700;
   color: #fff;
-  background: var(--correct-color);
+  background: linear-gradient(180deg, #22c55e, #16a34a);
   border: none;
-  border-radius: 8px;
+  border-radius: 12px;
   cursor: pointer;
-  transition: all 0.3s ease;
+  transition: transform 0.18s ease, box-shadow 0.18s ease;
   margin-top: 2rem;
+  box-shadow: 0 12px 28px rgba(34, 197, 94, 0.25), inset 0 1px 0 rgba(255,255,255,0.35);
 }
 
 #submit-btn:hover:not(:disabled) {
-  background: #157347;
+  transform: translateY(-2px);
 }
 
 #submit-btn:disabled {
-  background: #e9ecef;
+  background: #e5e7eb;
   color: var(--text-muted);
   cursor: not-allowed;
+  box-shadow: none;
 }
 
-/* ---------------------------------
-Modal (Pop-up) Styles
----------------------------------
-*/
+/* Modal */
 .modal-overlay {
   position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
+  inset: 0;
   background: rgba(0, 0, 0, 0.5);
   backdrop-filter: blur(5px);
   display: none;
@@ -318,14 +343,16 @@ Modal (Pop-up) Styles
 }
 
 .modal-content {
-  background: #fff;
+  background: linear-gradient(180deg, #ffffff 0%, #fbfdff 100%);
+
+  background: #ffffff;
   padding: 2.5rem;
-  border-radius: 16px;
+  border-radius: 18px;
   border: 1px solid var(--border-color);
   width: 90%;
-  max-width: 600px;
+  max-width: 640px;
   text-align: center;
-  box-shadow: 0 0 40px rgba(0, 0, 0, 0.15);
+  box-shadow: 0 24px 64px rgba(2, 6, 23, 0.16);
 }
 
 .modal-content h2 {
@@ -334,23 +361,19 @@ Modal (Pop-up) Styles
 }
 
 #score-percentage {
-  font-size: 4.5rem;
-  font-weight: 700;
+  font-size: 4.25rem;
+  font-weight: 800;
   margin: 1rem 0;
 }
 
 #grade-level {
   font-size: 1.5rem;
-  font-weight: bold;
-  margin-bottom: 1.5rem;
+  font-weight: 800;
+  margin-bottom: 1.25rem;
 }
 
-.grade-pass {
-  color: var(--correct-color);
-}
-.grade-fail {
-  color: var(--incorrect-color);
-}
+.grade-pass { color: var(--correct-color); }
+.grade-fail { color: #d97706; font-weight: 600; }
 
 .modal-buttons {
   margin-top: 1.5rem;
@@ -362,47 +385,41 @@ Modal (Pop-up) Styles
 
 .modal-buttons button,
 .modal-buttons a {
-  padding: 0.8rem 1.5rem;
+  padding: 0.85rem 1.4rem;
   border: 1px solid var(--border-color);
-  background: #e9ecef;
+  background: rgba(255,255,255,0.8);
   color: var(--text-color);
-  border-radius: 8px;
+  border-radius: 9999px;
   cursor: pointer;
-  transition: all 0.3s ease;
+  transition: transform 0.18s ease, box-shadow 0.18s ease, background 0.18s ease;
   font-size: 1rem;
-  font-weight: 600;
+  font-weight: 700;
   text-decoration: none;
+  box-shadow: 0 8px 18px rgba(2, 6, 23, 0.06);
 }
 
 .modal-buttons button:hover,
 .modal-buttons a:hover {
-  border-color: #b9c3ce;
-  background: #d3d9df;
+  transform: translateY(-2px);
+  background: #ffffff;
 }
 
 #next-lecture-btn {
-  background: var(--primary-color);
-  border-color: var(--primary-color);
+  background: linear-gradient(180deg, var(--btn-grad-start), var(--btn-grad-end));
+  border-color: transparent;
   color: #fff;
-  display: none; /* Hidden by default; shown via JS on pass */
+  display: none; /* Shown via JS on pass */
 }
 
-#next-lecture-btn:hover {
-  background: var(--primary-hover);
-}
-
-/* ---------------------------------
-Answer Review Section in Modal
----------------------------------
-*/
+/* Answer Review */
 #answer-review {
   margin-top: 2rem;
   max-height: 250px;
   overflow-y: auto;
   text-align: left;
   padding: 1rem;
-  background: #f8f9fa;
-  border-radius: 8px;
+  background: #f8fafc;
+  border-radius: 12px;
   border: 1px solid var(--border-color);
 }
 
@@ -411,38 +428,54 @@ Answer Review Section in Modal
   margin-bottom: 1rem;
   border-left: 4px solid;
   background: #fff;
-  border-radius: 8px;
+  border-radius: 12px;
 }
 
-.review-item.correct {
-  border-color: var(--correct-color);
-}
-.review-item.incorrect {
-  border-color: var(--incorrect-color);
-}
-.review-item p {
-  margin: 0.5rem 0;
-}
-.review-item .review-question {
-  font-weight: 600;
-  margin-bottom: 0.5rem;
-}
-.review-item .correct-answer {
-  color: var(--correct-color);
-}
-.review-item .incorrect-answer {
-  color: var(--incorrect-color);
-}
+.review-item.correct { border-color: var(--correct-color); }
+.review-item.incorrect { border-color: var(--incorrect-color); }
 
-/* ---------------------------------
-Responsive Design
----------------------------------
-*/
+.review-item p { margin: 0.5rem 0; }
+.review-item .review-question { font-weight: 700; margin-bottom: 0.5rem; }
+.review-item .correct-answer { color: var(--correct-color); }
+.review-item .incorrect-answer { color: var(--incorrect-color); }
+
+/* Responsive */
 @media (max-width: 768px) {
-  body {
-    padding: 1rem;
-  }
-  .container {
-    padding: 1.5rem;
-  }
+  body { padding: 1rem; }
+  .container { padding: 1.5rem; }
+}
+
+
+/* Softer fail message text */
+.modal-fail-message {
+  color: #d97706; /* amber tone */
+  font-size: 1.1rem;
+  margin-top: 0.5rem;
+}
+
+
+/* Friendlier feedback tone */
+#feedback-text {
+  color: var(--text-muted);
+  font-size: 1.05rem;
+  margin-top: 0.5rem;
+}
+
+
+/* Improved focus ring */
+:where(a, button, input, select, textarea):focus-visible {
+  outline: 3px solid rgba(37, 99, 235, 0.35);
+  outline-offset: 2px;
+  border-radius: 10px;
+}
+
+
+/* Subtle container backdrop */
+.container::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  background: radial-gradient(1000px 700px at 10% 80%, rgba(255,255,255,0.5), rgba(255,255,255,0));
+  pointer-events: none;
+  z-index: 0;
 }

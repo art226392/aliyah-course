@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Aliyah Course - Assessment 1</title>
+    <title>Aliyah Course - Assessment 3</title>
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -62,7 +62,7 @@
     <canvas id="fireworks-canvas"></canvas>
     <div class="container">
       <header class="quiz-header">
-        <h1>Assessment 1</h1>
+        <h1>Assessment 3</h1>
         <div class="progress-bar-container">
           <div class="progress-bar" id="progress-bar"></div>
         </div>
@@ -91,7 +91,9 @@
         <p id="feedback-text"></p>
         <div id="answer-review"></div>
         <div class="modal-buttons">
-          <a href="index.html" class="nav-btn secondary">Return to Lecture</a>
+          <a href="lecture3.html" class="nav-btn secondary"
+            >Return to Lecture</a
+          >
           <button id="retry-btn" class="nav-btn secondary">Retry Quiz</button>
           <!-- This button is hidden by default and shown on pass -->
           <a href="#" id="next-lecture-btn" class="nav-btn">Next Lecture →</a>
@@ -101,158 +103,160 @@
 
     <script>
       document.addEventListener("DOMContentLoaded", () => {
-        // --- QUIZ DATA - STRICTLY FROM LECTURE 1 ONLY ---
+        // --- QUIZ DATA - STRICTLY FROM LECTURE 3 ONLY ---
         const quizQuestions = [
           {
             question:
-              "According to the introduction, what spans centuries, continents, and countless individual lives?",
+              "In which book and chapter does Moses prophesy about Israel's return even from the farthest parts of the world?",
             options: [
-              "The history of Jerusalem",
-              "The return of the Jewish people to their ancestral homeland",
-              "The development of Hebrew language",
-              "The building of synagogues worldwide",
-            ],
-            answer: 1,
-          },
-          {
-            question: "What does the text state is at the heart of this story?",
-            options: [
-              "The Mosaic Law",
-              "The Temple Mount",
-              "The Abrahamic Covenant",
-              "The State of Israel's founding",
+              "Genesis 15:1-5",
+              "Exodus 20:1-5",
+              "Deuteronomy 30:1-5",
+              "Numbers 24:1-5",
             ],
             answer: 2,
           },
           {
             question:
-              "According to the text, what kind of possession did God promise the land of Israel would be?",
-            options: ["Temporary", "Conditional", "Everlasting", "Shared"],
-            answer: 2,
-          },
-          {
-            question:
-              "The text states that the covenant is NOT conditional on what?",
+              "During Solomon's Temple dedication prayer in 1 Kings 8, what does he ask God to do if the people are carried away captive?",
             options: [
-              "The faithfulness or worthiness of the Jewish people",
-              "International recognition",
-              "Political stability",
-              "Economic prosperity",
-            ],
-            answer: 0,
-          },
-          {
-            question:
-              "What does the text say happens even when God's people falter or stray?",
-            options: [
-              "The covenant is cancelled",
-              "God finds a new people",
-              "God keeps His promises",
-              "The land is given to others",
+              "Destroy their enemies",
+              "Send them prophets",
+              "Hear their prayers and bring them back to the land",
+              "Give them new lands",
             ],
             answer: 2,
           },
           {
             question:
-              "According to the introduction, the return of the Jewish people is described as what kind of demonstration?",
+              "According to Isaiah 11:11-12, the Lord will set His hand to recover His people how many times?",
             options: [
-              "A political demonstration",
-              "A demonstration of God's faithfulness and His sovereign plan",
-              "A military demonstration",
-              "An economic demonstration",
+              "The first time",
+              "The second time",
+              "Three times",
+              "Seven times",
             ],
             answer: 1,
           },
           {
             question:
-              "Which book and chapter does the text reference when discussing Israel's restoration being linked to the blessing of nations?",
-            options: ["Genesis 12", "Isaiah 40", "Romans 11", "Revelation 21"],
-            answer: 2,
-          },
-          {
-            question:
-              "What phrase does Paul use to describe what it will be like for the world when Jewish people return to God?",
+              "In Jeremiah 16:14-15, what event will the future return eclipse in significance?",
             options: [
-              "A new covenant",
-              "Life from the dead",
-              "The end of days",
-              "Peace on earth",
+              "The flood of Noah",
+              "The Exodus from Egypt",
+              "The fall of Jericho",
+              "The reign of David",
             ],
             answer: 1,
           },
           {
             question:
-              "The dissertation will trace the theme of ingathering throughout which parts of the Bible?",
+              "What famous vision in Ezekiel 37:1-14 symbolizes Israel's national and spiritual resurrection?",
             options: [
-              "Only the Old Testament",
-              "Only the New Testament",
-              "The Old and New Testaments",
-              "The Prophetic books only",
-            ],
-            answer: 2,
-          },
-          {
-            question:
-              "When did the early pioneers mentioned in the text settle the land?",
-            options: [
-              "Early 19th century",
-              "Late 19th century",
-              "Early 20th century",
-              "Mid-20th century",
+              "The four beasts",
+              "The Valley of Dry Bones",
+              "The new temple",
+              "The wheel within a wheel",
             ],
             answer: 1,
           },
           {
             question:
-              "From where does the text say waves of immigrants have come in recent decades?",
+              "According to Amos 9:14-15, what does God promise about Israel's permanence in the land after their return?",
             options: [
-              "Only from Europe",
-              "Only from Russia",
-              "The four corners of the earth",
-              "Neighboring countries only",
-            ],
-            answer: 2,
-          },
-          {
-            question:
-              "What does the dissertation aim to demonstrate about Aliyah's place in God's plan?",
-            options: [
-              "It is a peripheral issue",
-              "It is a modern political movement",
-              "It is central and pivotal to God's redemptive plan",
-              "It is symbolic only",
-            ],
-            answer: 2,
-          },
-          {
-            question:
-              "According to the text, what are the Jewish people setting the stage for as they return?",
-            options: [
-              "World peace negotiations",
-              "The climactic events of the last days and the coming of the Messiah",
-              "A new world order",
-              "The rebuilding of the Temple only",
+              "They will rule over all nations",
+              "They will never again be uprooted",
+              "They will build a new temple immediately",
+              "They will become the largest nation",
             ],
             answer: 1,
           },
           {
             question:
-              "What does the text say will be established when the Messiah comes?",
+              "In Zephaniah 3:19-20, God promises to give Israel praise and fame in every land where they experienced what?",
+            options: ["Victory", "Wealth", "Shame", "Power"],
+            answer: 2,
+          },
+          {
+            question:
+              "According to Zechariah 8:7-8, from which directions will God save His people?",
             options: [
-              "A new covenant only",
-              "Peace in the Middle East",
-              "His kingdom on earth",
-              "The third temple",
+              "North and south",
+              "East and west",
+              "All four corners",
+              "From the sea and mountains",
+            ],
+            answer: 1,
+          },
+          {
+            question:
+              "In Isaiah 11:1-10, the second regathering of Israel is connected with which type of king?",
+            options: [
+              "A warrior king",
+              "A priestly king",
+              "The Messianic King",
+              "A foreign king",
             ],
             answer: 2,
           },
           {
-            question: "Who is credited as the author of this course?",
+            question:
+              "In Jeremiah 23:5-8, what is the Messianic King identified as?",
             options: [
-              "Dr. Abraham Cohen",
-              "Arthur Howard Flower Th.D.",
-              "Professor David Stone",
-              "Rabbi Samuel Green",
+              "The Lion of Judah",
+              "The LORD Our Righteousness",
+              "The Prince of Peace",
+              "The Root of Jesse",
+            ],
+            answer: 1,
+          },
+          {
+            question:
+              "According to Ezekiel 37:24-28, who does God promise will be Israel's prince forever?",
+            options: ["Moses", "Abraham", "David", "Solomon"],
+            answer: 2,
+          },
+          {
+            question:
+              "In Hosea 3:4-5, after being without a king, Israel will return and seek the Lord their God and whom?",
+            options: [
+              "Moses their prophet",
+              "Abraham their father",
+              "David their king",
+              "Elijah their prophet",
+            ],
+            answer: 2,
+          },
+          {
+            question:
+              "According to the text, what does Paul say in Romans 11 about Israel's acceptance?",
+            options: [
+              "It will bring judgment on the nations",
+              "It will lead to life from the dead and riches for the world",
+              "It will end the church age",
+              "It will start a new covenant",
+            ],
+            answer: 1,
+          },
+          {
+            question:
+              "What does Psalm 122:6 call Christians to do, as mentioned in the lecture?",
+            options: [
+              "Visit Jerusalem yearly",
+              "Support the temple rebuilding",
+              "Pray for the peace of Jerusalem",
+              "Send offerings to Israel",
+            ],
+            answer: 2,
+          },
+          {
+            question:
+              "According to the lecture, the modern-day Aliyah is described as a precursor to what two things?",
+            options: [
+              "World peace and prosperity",
+              "The spiritual restoration of Israel and establishment of the Messianic kingdom",
+              "The rebuilding of the temple and the ark's return",
+              "The conversion of all nations and end of war",
             ],
             answer: 1,
           },
@@ -531,9 +535,9 @@
             gradeLevelEl.textContent = "PASS";
             gradeLevelEl.className = "grade-pass celebrating";
             feedbackTextEl.textContent =
-              "Excellent! You have a strong understanding of the material. You may proceed to the next lecture.";
+              "Excellent! You have mastered the prophetic promises. You may proceed to the next lecture.";
             nextLectureBtn.style.display = "inline-block"; // Show button
-            nextLectureBtn.href = "lecture2.html"; // Set link
+            nextLectureBtn.href = "lecture4.html"; // Set link to next lecture
             nextLectureBtn.classList.add("celebrate");
 
             // Start fireworks animation

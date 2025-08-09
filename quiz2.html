@@ -13,8 +13,53 @@
     />
     <!-- Unified Stylesheet -->
     <link rel="stylesheet" href="style.css" />
+    <style>
+      /* Fireworks Canvas Styling */
+      #fireworks-canvas {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        pointer-events: none;
+        z-index: 999;
+      }
+
+      /* Success Animation for Next Button */
+      @keyframes pulseGlow {
+        0% {
+          box-shadow: 0 0 0 0 rgba(40, 167, 69, 0.7);
+        }
+        70% {
+          box-shadow: 0 0 0 10px rgba(40, 167, 69, 0);
+        }
+        100% {
+          box-shadow: 0 0 0 0 rgba(40, 167, 69, 0);
+        }
+      }
+
+      #next-lecture-btn.celebrate {
+        animation: pulseGlow 2s infinite;
+      }
+
+      /* Confetti Text Animation */
+      @keyframes celebrate {
+        0%,
+        100% {
+          transform: scale(1);
+        }
+        50% {
+          transform: scale(1.05);
+        }
+      }
+
+      .grade-pass.celebrating {
+        animation: celebrate 0.5s ease-in-out;
+      }
+    </style>
   </head>
   <body>
+    <canvas id="fireworks-canvas"></canvas>
     <div class="container">
       <header class="quiz-header">
         <h1>Assessment 2</h1>
@@ -23,7 +68,7 @@
         </div>
         <div class="stats-container">
           <div id="question-counter">Answered: 0 / 15</div>
-          <div id="timer">Time Left: 04:00</div>
+          <div id="timer">Time Left: 08:00</div>
         </div>
       </header>
 
@@ -60,165 +105,159 @@
 
     <script>
       document.addEventListener("DOMContentLoaded", () => {
-        // --- QUIZ DATA ---
+        // --- QUIZ DATA - STRICTLY FROM LECTURE 2 ONLY ---
         const quizQuestions = [
           {
             question:
-              "What is inseparably linked to God's plan of redemption for humanity?",
+              "According to Lecture 2, what is inseparably linked to the history and destiny of Israel?",
             options: [
-              "The geography of the Middle East",
-              "The history and destiny of Israel",
-              "The rise of modern nations",
-              "The development of religious philosophy",
+              "The development of modern technology",
+              "God's plan of redemption for humanity",
+              "The economic prosperity of nations",
+              "The political structure of governments",
             ],
             answer: 1,
           },
           {
             question:
-              "What are the three key promises God makes to Abraham in the Abrahamic Covenant?",
+              "Which three books of Genesis are specifically mentioned as recording God's covenant with Abraham?",
             options: [
-              "Wealth, power, and fame",
-              "Wisdom, knowledge, and understanding",
+              "Genesis 1, 2, and 3",
+              "Genesis 10, 11, and 12",
+              "Genesis 12, 15, and 17",
+              "Genesis 20, 25, and 30",
+            ],
+            answer: 2,
+          },
+          {
+            question:
+              "What are the three key promises mentioned in the Abrahamic Covenant?",
+            options: [
+              "Peace, prosperity, and protection",
               "Land, descendants, and blessing",
-              "Health, long life, and happiness",
-            ],
-            answer: 2,
-          },
-          {
-            question:
-              "The fulfillment of the Abrahamic Covenant is dependent on what?",
-            options: [
-              "Abraham's performance and obedience",
-              "The support of surrounding nations",
-              "God's faithfulness",
-              "The changing political landscape",
-            ],
-            answer: 2,
-          },
-          {
-            question:
-              "According to Exodus 19:5-6, Israel is called to be a special treasure to God and a:",
-            options: [
-              "Kingdom of warriors and a mighty nation",
-              "Kingdom of priests and a holy nation",
-              "Kingdom of scholars and a wise nation",
-              "Kingdom of merchants and a prosperous nation",
+              "Wisdom, wealth, and worship",
+              "Faith, hope, and love",
             ],
             answer: 1,
           },
           {
             question:
-              "What is described as Israel's primary calling as a 'light to the nations'?",
+              "According to the text, God pledges to make Abraham's offspring as numerous as what?",
             options: [
-              "To conquer other lands",
-              "To be a living witness to the one true God",
-              "To build the largest temple",
-              "To create a global economy",
-            ],
-            answer: 1,
-          },
-          {
-            question:
-              "What does the text say is the ultimate result of Israel repeatedly breaking God's covenant?",
-            options: [
-              "Immediate forgiveness",
-              "The covenant being nullified",
-              "Exile from the land",
-              "The loss of their identity",
+              "The sand on the seashore",
+              "The leaves on the trees",
+              "The stars in the sky",
+              "The drops in the ocean",
             ],
             answer: 2,
           },
           {
             question:
-              "The prophets foretold a restoration for Israel that was not just physical, but also:",
-            options: ["Political", "Economical", "Spiritual", "Military"],
-            answer: 2,
-          },
-          {
-            question:
-              "In Romans 11, what did Israel's temporary hardening lead to?",
+              "What specific land did God promise to give as an everlasting possession?",
             options: [
-              "The end of the covenant",
-              "The gospel being extended to the Gentiles",
-              "The destruction of Jerusalem",
-              "The loss of all promises",
-            ],
-            answer: 1,
-          },
-          {
-            question:
-              "Paul argues that Israel's future restoration will lead to what for the world?",
-            options: [
-              "Greater political turmoil",
-              "Economic collapse",
-              "Even greater riches, like 'life from the dead'",
-              "A new set of laws",
+              "The land of Egypt",
+              "The land of Babylon",
+              "The land of Canaan",
+              "The land of Assyria",
             ],
             answer: 2,
           },
           {
             question:
-              "What did Jesus affirm when He declared 'salvation is of the Jews'?",
+              "According to the text, are the Abrahamic promises conditional or unconditional?",
             options: [
-              "That salvation was only for Jewish people",
-              "The ongoing validity of God's promises to Israel",
-              "A new political movement",
-              "The end of the old covenants",
+              "Conditional on obedience",
+              "Unconditional and eternal",
+              "Partially conditional",
+              "Temporary and conditional",
+            ],
+            answer: 1,
+          },
+          {
+            question: "Whose name was changed to Israel according to the text?",
+            options: ["Abraham", "Isaac", "Jacob", "Joseph"],
+            answer: 2,
+          },
+          {
+            question:
+              "According to Exodus 19:5-6, Israel is called to be what kind of kingdom?",
+            options: [
+              "A kingdom of warriors",
+              "A kingdom of priests",
+              "A kingdom of prophets",
+              "A kingdom of kings",
             ],
             answer: 1,
           },
           {
             question:
-              "What is the main point of Romans chapters 9-11 regarding Israel?",
+              "What does Exodus 19:5-6 say Israel will be to God above all people?",
             options: [
-              "That the Church has completely replaced Israel",
-              "That God's promises to Israel are irrevocable",
-              "That Israel's role is finished",
-              "That Gentiles are superior to Jews",
+              "A mighty fortress",
+              "A special treasure",
+              "A golden crown",
+              "A chosen weapon",
             ],
             answer: 1,
           },
           {
             question:
-              "The book of Revelation portrays what group being sealed from the twelve tribes of Israel?",
+              "According to Isaiah 42:6 and 49:6, Israel is called to be what to the nations?",
+            options: ["A judge", "A ruler", "A light", "A wall"],
+            answer: 2,
+          },
+          {
+            question:
+              "Through what three things is Israel to demonstrate God's character according to the text?",
             options: [
-              "12,000 priests",
-              "7,000 prophets",
-              "144,000 people",
-              "All the elders of Israel",
+              "Military might, economic power, and political influence",
+              "Temple worship, sacrifices, and festivals",
+              "Covenant relationship, adherence to His laws, and presence in Canaan",
+              "Prayer, fasting, and meditation",
             ],
             answer: 2,
           },
           {
             question:
-              "How does the New Testament relate the Church to Israel's covenant blessings?",
+              "According to Deuteronomy 4:5-8, what should Israel's adherence to God's laws do?",
             options: [
-              "The Church supersedes and eliminates Israel",
-              "The Church is grafted into the blessings",
-              "The Church and Israel have separate, unrelated blessings",
-              "The Church's blessings are superior",
-            ],
-            answer: 1,
-          },
-          {
-            question:
-              "What is the modern-day return of the Jewish people to their homeland called?",
-            options: [
-              "The Exodus",
-              "The Diaspora",
-              "Aliyah",
-              "The Great Return",
+              "Make them wealthy",
+              "Make them feared",
+              "Attract the nations to God's ways",
+              "Isolate them from other nations",
             ],
             answer: 2,
           },
           {
             question:
-              "What are Christians called to do in response to God's ongoing work in Israel?",
+              "The text describes Israel as a living witness to the one true God in a world filled with what?",
             options: [
-              "Remain neutral and observe",
-              "Oppose the political state of Israel",
-              "Pray for Jerusalem and support the gathering of His people",
-              "Focus only on the Church's growth",
+              "War and conflict",
+              "Idolatry and darkness",
+              "Poverty and disease",
+              "Ignorance and superstition",
+            ],
+            answer: 1,
+          },
+          {
+            question:
+              "According to the text, through whose seed will all nations of the earth be blessed?",
+            options: [
+              "Moses's seed",
+              "David's seed",
+              "Abraham's seed",
+              "Solomon's seed",
+            ],
+            answer: 2,
+          },
+          {
+            question:
+              "What does the text say is essential to understand to comprehend the significance of Aliyah?",
+            options: [
+              "Modern political movements",
+              "Ancient Middle Eastern history",
+              "The broader biblical context of Israel's unique calling and mission",
+              "The geography of the promised land",
             ],
             answer: 2,
           },
@@ -242,8 +281,166 @@
         // --- STATE VARIABLES ---
         let userAnswers = new Array(quizQuestions.length).fill(null);
         let timerInterval;
-        let timeLeft = 240; // 4 minutes in seconds
+        let timeLeft = 480; // 8 minutes in seconds
         let quizInProgress = true;
+
+        // --- FIREWORKS ANIMATION ---
+        class Fireworks {
+          constructor() {
+            this.canvas = document.getElementById("fireworks-canvas");
+            this.ctx = this.canvas.getContext("2d");
+            this.particles = [];
+            this.rockets = [];
+            this.resize();
+            window.addEventListener("resize", () => this.resize());
+          }
+
+          resize() {
+            this.canvas.width = window.innerWidth;
+            this.canvas.height = window.innerHeight;
+          }
+
+          createRocket() {
+            const rocket = {
+              x: Math.random() * this.canvas.width,
+              y: this.canvas.height,
+              vx: (Math.random() - 0.5) * 2,
+              vy: -Math.random() * 3 - 12,
+              trail: [],
+            };
+            this.rockets.push(rocket);
+          }
+
+          explode(x, y) {
+            const colors = [
+              "#FFD700",
+              "#FF69B4",
+              "#00CED1",
+              "#FF6347",
+              "#9370DB",
+              "#32CD32",
+            ];
+            const color = colors[Math.floor(Math.random() * colors.length)];
+            const particleCount = 30 + Math.floor(Math.random() * 20);
+
+            for (let i = 0; i < particleCount; i++) {
+              const angle = (Math.PI * 2 * i) / particleCount;
+              const velocity = 2 + Math.random() * 3;
+              this.particles.push({
+                x: x,
+                y: y,
+                vx: Math.cos(angle) * velocity,
+                vy: Math.sin(angle) * velocity,
+                color: color,
+                life: 1,
+                decay: 0.015 + Math.random() * 0.01,
+              });
+            }
+          }
+
+          update() {
+            // Update rockets
+            for (let i = this.rockets.length - 1; i >= 0; i--) {
+              const rocket = this.rockets[i];
+              rocket.vy += 0.15; // gravity
+              rocket.x += rocket.vx;
+              rocket.y += rocket.vy;
+
+              rocket.trail.push({ x: rocket.x, y: rocket.y });
+              if (rocket.trail.length > 10) rocket.trail.shift();
+
+              if (rocket.vy >= 0) {
+                this.explode(rocket.x, rocket.y);
+                this.rockets.splice(i, 1);
+              }
+            }
+
+            // Update particles
+            for (let i = this.particles.length - 1; i >= 0; i--) {
+              const p = this.particles[i];
+              p.x += p.vx;
+              p.y += p.vy;
+              p.vy += 0.05; // gravity
+              p.vx *= 0.99; // air resistance
+              p.life -= p.decay;
+
+              if (p.life <= 0) {
+                this.particles.splice(i, 1);
+              }
+            }
+          }
+
+          draw() {
+            this.ctx.fillStyle = "rgba(0, 0, 0, 0.1)";
+            this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
+
+            // Draw rockets
+            this.rockets.forEach((rocket) => {
+              this.ctx.beginPath();
+              this.ctx.strokeStyle = "rgba(255, 255, 255, 0.8)";
+              this.ctx.lineWidth = 2;
+              if (rocket.trail.length > 1) {
+                this.ctx.moveTo(rocket.trail[0].x, rocket.trail[0].y);
+                for (let i = 1; i < rocket.trail.length; i++) {
+                  this.ctx.lineTo(rocket.trail[i].x, rocket.trail[i].y);
+                }
+              }
+              this.ctx.stroke();
+            });
+
+            // Draw particles
+            this.particles.forEach((p) => {
+              this.ctx.globalAlpha = p.life;
+              this.ctx.fillStyle = p.color;
+              this.ctx.beginPath();
+              this.ctx.arc(p.x, p.y, 2 + p.life * 2, 0, Math.PI * 2);
+              this.ctx.fill();
+            });
+            this.ctx.globalAlpha = 1;
+          }
+
+          start() {
+            this.animationId = null;
+            const animate = () => {
+              this.update();
+              this.draw();
+              this.animationId = requestAnimationFrame(animate);
+            };
+            animate();
+
+            // Launch rockets periodically
+            this.rocketInterval = setInterval(() => {
+              this.createRocket();
+            }, 400);
+
+            // Stop after 5 seconds
+            setTimeout(() => {
+              this.stop();
+            }, 5000);
+          }
+
+          stop() {
+            if (this.rocketInterval) {
+              clearInterval(this.rocketInterval);
+              this.rocketInterval = null;
+            }
+
+            // Let existing particles finish
+            const cleanup = () => {
+              if (this.particles.length > 0 || this.rockets.length > 0) {
+                this.update();
+                this.draw();
+                requestAnimationFrame(cleanup);
+              } else {
+                this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+                if (this.animationId) {
+                  cancelAnimationFrame(this.animationId);
+                }
+              }
+            };
+            cleanup();
+          }
+        }
 
         // --- FUNCTIONS ---
 
@@ -298,7 +495,7 @@
         }
 
         /**
-         * Starts the 4-minute countdown timer.
+         * Starts the 8-minute countdown timer.
          */
         function startTimer() {
           timerInterval = setInterval(() => {
@@ -334,14 +531,21 @@
           const percentage = Math.round((score / quizQuestions.length) * 100);
           scorePercentageEl.textContent = `${percentage}%`;
 
-          // NEW: Enforce 80% pass condition
+          // NEW: Enforce 80% pass condition with celebration
           if (percentage >= 80) {
             gradeLevelEl.textContent = "PASS";
-            gradeLevelEl.className = "grade-pass";
+            gradeLevelEl.className = "grade-pass celebrating";
             feedbackTextEl.textContent =
               "Congratulations! You have successfully completed the course assessments.";
             nextLectureBtn.style.display = "inline-block"; // Show button
             nextLectureBtn.href = "#"; // No next lecture yet
+            nextLectureBtn.classList.add("celebrate");
+
+            // Start fireworks animation
+            setTimeout(() => {
+              const fireworks = new Fireworks();
+              fireworks.start();
+            }, 500);
           } else {
             gradeLevelEl.textContent = "FAIL";
             gradeLevelEl.className = "grade-fail";
