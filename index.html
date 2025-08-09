@@ -4,162 +4,17 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Aliyah Course - Lecture 1</title>
+    <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
       href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
       rel="stylesheet"
     />
-    <style>
-      :root {
-        --bg-color: #f0f8ff; /* AliceBlue as base */
-        --text-color: #2c3e50;
-        --text-muted: #5a6775;
-        --primary-color: #007bff;
-        --card-bg: rgba(255, 255, 255, 0.75);
-        --shadow-color: rgba(44, 62, 80, 0.1);
-      }
-
-      body {
-        font-family: "Poppins", sans-serif;
-        background-color: var(--bg-color);
-        color: var(--text-color);
-        margin: 0;
-        line-height: 1.7;
-        overflow-x: hidden;
-      }
-
-      #bg-canvas {
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        z-index: -1;
-      }
-
-      .container {
-        position: relative;
-        z-index: 1;
-        max-width: 900px;
-        margin: 0 auto;
-        padding: 4rem 2rem;
-        animation: fadeIn 1s ease-out;
-      }
-
-      @keyframes fadeIn {
-        from {
-          opacity: 0;
-          transform: translateY(20px);
-        }
-        to {
-          opacity: 1;
-          transform: translateY(0);
-        }
-      }
-
-      header {
-        text-align: center;
-        margin-bottom: 3rem;
-      }
-
-      .header-logo {
-        width: 80px;
-        height: auto;
-        margin-bottom: 1.5rem;
-        opacity: 0.8;
-      }
-
-      header h1 {
-        font-size: clamp(2.5rem, 5vw, 3.5rem);
-        font-weight: 700;
-        margin: 0;
-      }
-
-      header h2 {
-        font-size: 1.2rem;
-        font-weight: 400;
-        color: var(--text-muted);
-      }
-
-      .author-credit {
-        font-size: 1rem;
-        font-style: italic;
-        color: var(--text-muted);
-        margin-top: 0.5rem;
-      }
-
-      .content-card {
-        background: var(--card-bg);
-        backdrop-filter: blur(12px);
-        -webkit-backdrop-filter: blur(12px);
-        border-radius: 20px;
-        padding: 2.5rem;
-        box-shadow: 0 10px 35px var(--shadow-color);
-        border: 1px solid rgba(255, 255, 255, 0.5);
-      }
-
-      .lecture-text p {
-        font-size: 1.05rem;
-        margin-bottom: 1.5rem;
-        color: var(--text-muted);
-      }
-
-      .lecture-text h3 {
-        font-size: 1.5rem;
-        font-weight: 600;
-        color: var(--primary-color);
-        margin-top: 2.5rem;
-        margin-bottom: 1rem;
-      }
-
-      .video-container {
-        margin: 2.5rem 0;
-        border-radius: 16px;
-        overflow: hidden;
-        position: relative;
-        box-shadow: 0 8px 25px var(--shadow-color);
-      }
-
-      .video-container iframe {
-        display: block;
-        width: 100%;
-        height: auto;
-        aspect-ratio: 16 / 9;
-        border: none;
-      }
-
-      .navigation-buttons {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        margin-top: 3rem;
-        padding-top: 2rem;
-        border-top: 1px solid rgba(0, 0, 0, 0.08);
-      }
-
-      .nav-btn {
-        display: inline-block;
-        background: var(--primary-color);
-        color: #fff;
-        padding: 0.9rem 2.5rem;
-        font-size: 1rem;
-        font-weight: 500;
-        text-decoration: none;
-        border-radius: 50px;
-        transition: all 0.3s ease;
-        box-shadow: 0 4px 15px rgba(0, 123, 255, 0.2);
-      }
-
-      .nav-btn:hover {
-        transform: translateY(-3px);
-        box-shadow: 0 6px 20px rgba(0, 123, 255, 0.3);
-      }
-    </style>
+    <!-- Unified Stylesheet -->
+    <link rel="stylesheet" href="style.css" />
   </head>
   <body>
-    <canvas id="bg-canvas"></canvas>
-
     <div class="container">
       <header>
         <img
@@ -172,7 +27,7 @@
         <p class="author-credit">By Arthur Howard Flower Th.D.</p>
       </header>
 
-      <main class="content-card">
+      <main>
         <div class="lecture-text">
           <h3>INTRODUCTION</h3>
           <p>
@@ -214,30 +69,6 @@
             whole world.
           </p>
           <p>
-            Throughout history, there have been glimpses and foretastes of this
-            great ingathering, as waves of Jewish immigrants have returned to
-            Israel from the four corners of the earth. From the early pioneers
-            of the First Aliyah to the survivors of the Holocaust and the
-            refugees of the modern era, each generation has played its part in
-            the unfolding story of restoration and redemption.
-          </p>
-          <p>
-            Christians have a unique and significant role to play in this story.
-            They are called to be advocates, intercessors, and practical
-            supporters of the Jewish people as they make their way home to
-            Israel. This is done not out of a sense of duty or obligation, but
-            out of a deep love and appreciation for the Jewish people as God's
-            chosen ones, and out of a recognition of the spiritual debt that
-            Gentiles owe them as being grafted into the covenant by faith.
-          </p>
-          <p>
-            Over the past century, the world has witnessed the miraculous
-            rebirth of the State of Israel and the ongoing return of the Jewish
-            people to their homeland. This modern-day Aliyah is a testament to
-            God's faithfulness to His ancient promises and a sign of His
-            unfolding plan of redemption for Israel and the nations.
-          </p>
-          <p>
             This dissertation will delve into the biblical and theological
             foundations of Aliyah, tracing the theme of the ingathering of the
             exiles throughout the Old and New Testaments. It will explore the
@@ -247,15 +78,6 @@
             recent decades.
           </p>
           <p>
-            Attention will also be given to the unique challenges and
-            opportunities that Aliyah presents for the State of Israel and the
-            Jewish people, as well as the role of Christians in supporting and
-            facilitating this ongoing return. The voices of key Christian
-            leaders and organizations who have been at the forefront of Aliyah
-            work will be highlighted, offering insights and inspiration for all
-            who desire to align themselves with God's purposes for Israel.
-          </p>
-          <p>
             Ultimately, this dissertation aims to demonstrate that Aliyah is not
             a peripheral issue, but a central and pivotal part of God's
             redemptive plan for the world. As the Jewish people return to their
@@ -263,110 +85,13 @@
             the stage for the climactic events of the last days, the coming of
             the Messiah, and the establishment of His kingdom on earth.
           </p>
-          <p>
-            May this work stir faith, deepen understanding, and inspire action
-            in all who read it. May it contribute to the hastening of that great
-            day when the words of the prophet Isaiah will be fulfilled: "The
-            ransomed of the Lord shall return, and come to Zion with singing,
-            with everlasting joy on their heads. They shall obtain joy and
-            gladness, and sorrow and sighing shall flee away" (Isaiah 35:10).
-          </p>
         </div>
 
         <div class="navigation-buttons">
-          <a href="quiz1.html" class="nav-btn">Take Assessment</a>
-          <a href="lecture2.html" class="nav-btn">Next Lesson →</a>
+          <!-- The only option from lecture 1 is to take the first assessment -->
+          <a href="quiz1.html" class="nav-btn">Take Assessment for Lecture 1</a>
         </div>
       </main>
     </div>
-
-    <script>
-      // Light-themed animated grid, particle, and gradient background
-      const canvas = document.getElementById("bg-canvas");
-      const ctx = canvas.getContext("2d");
-
-      let width = (canvas.width = window.innerWidth);
-      let height = (canvas.height = window.innerHeight);
-      let time = 0;
-
-      window.addEventListener("resize", () => {
-        width = canvas.width = window.innerWidth;
-        height = canvas.height = window.innerHeight;
-      });
-
-      const particles = [];
-      const particleCount = 40;
-
-      for (let i = 0; i < particleCount; i++) {
-        particles.push({
-          x: Math.random() * width,
-          y: Math.random() * height,
-          vx: (Math.random() - 0.5) * 0.2,
-          vy: (Math.random() - 0.5) * 0.2,
-          radius: Math.random() * 1,
-        });
-      }
-
-      function drawGrid() {
-        ctx.save();
-        ctx.strokeStyle = "rgba(0, 123, 255, 0.1)";
-        ctx.lineWidth = 0.5;
-        const gridSize = 60;
-
-        ctx.translate(width / 2, height / 2);
-        ctx.rotate(time * 0.00005);
-        ctx.translate(-width / 2, -height / 2);
-
-        for (let i = -width; i < width * 2; i += gridSize) {
-          ctx.beginPath();
-          ctx.moveTo(i, -height);
-          ctx.lineTo(i, height * 2);
-          ctx.stroke();
-        }
-        for (let j = -height; j < height * 2; j += gridSize) {
-          ctx.beginPath();
-          ctx.moveTo(-width, j);
-          ctx.lineTo(width * 2, j);
-          ctx.stroke();
-        }
-        ctx.restore();
-      }
-
-      function animate() {
-        time++;
-        ctx.clearRect(0, 0, width, height);
-
-        // Subtle light gradient
-        const gradient = ctx.createRadialGradient(
-          width / 2 + Math.sin(time * 0.0005) * width * 0.1,
-          height / 2 + Math.cos(time * 0.0005) * height * 0.1,
-          0,
-          width / 2,
-          height / 2,
-          Math.max(width, height)
-        );
-        gradient.addColorStop(0, "rgba(230, 247, 255, 0.3)");
-        gradient.addColorStop(1, "rgba(240, 248, 255, 0)");
-        ctx.fillStyle = gradient;
-        ctx.fillRect(0, 0, width, height);
-
-        drawGrid();
-
-        particles.forEach((p) => {
-          p.x += p.vx;
-          p.y += p.vy;
-          if (p.x < 0 || p.x > width) p.vx *= -1;
-          if (p.y < 0 || p.y > height) p.vy *= -1;
-          ctx.beginPath();
-          ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
-          ctx.fillStyle = "rgba(44, 62, 80, 0.4)";
-          ctx.fill();
-        });
-
-        requestAnimationFrame(animate);
-      }
-
-      animate();
-    </script>
   </body>
 </html>

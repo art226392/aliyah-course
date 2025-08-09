@@ -1,0 +1,448 @@
+/*
+==================================================
+Unified Stylesheet for Aliyah Online Course - Light Theme
+==================================================
+*/
+
+/* ---------------------------------
+Root Variables & General Setup
+---------------------------------
+- Defines the color palette for a consistent light theme.
+- Sets up the base font, background, and text colors.
+*/
+:root {
+  --bg-color: #f8f9fa;
+  --card-bg: rgba(255, 255, 255, 0.85);
+  --border-color: #dee2e6;
+  --text-color: #212529;
+  --text-muted: #6c757d;
+  --primary-color: #007bff;
+  --primary-hover: #0069d9;
+  --correct-color: #198754;
+  --incorrect-color: #dc3545;
+  --shadow-color: rgba(0, 0, 0, 0.075);
+}
+
+body {
+  font-family: "Poppins", sans-serif;
+  background-color: var(--bg-color);
+  color: var(--text-color);
+  margin: 0;
+  padding: 2rem;
+  line-height: 1.7;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  min-height: 100vh;
+  overflow-x: hidden; /* Prevent horizontal scroll */
+}
+
+/* ---------------------------------
+Animated Background Canvas
+---------------------------------
+- Positions the canvas behind all other content.
+*/
+#bg-canvas {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: -1;
+  opacity: 0.6; /* Make the effect subtle */
+}
+
+/* ---------------------------------
+Main Content Container
+---------------------------------
+- A single container style for both lectures and quizzes.
+*/
+.container {
+  position: relative; /* Needed to be on top of the canvas */
+  z-index: 1;
+  width: 100%;
+  max-width: 900px;
+  background: var(--card-bg);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid var(--border-color);
+  border-radius: 16px;
+  padding: 2.5rem;
+  box-shadow: 0 8px 32px var(--shadow-color);
+  animation: fadeIn 1s ease-out;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ---------------------------------
+Header & Typography
+---------------------------------
+- Consistent header for all pages.
+- Includes logo and titles.
+*/
+header {
+  text-align: center;
+  margin-bottom: 2rem;
+  padding-bottom: 1.5rem;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.header-logo {
+  width: 80px;
+  height: auto;
+  margin-bottom: 1.5rem;
+}
+
+header h1 {
+  font-size: clamp(2.5rem, 5vw, 3.5rem);
+  font-weight: 700;
+  margin: 0;
+  color: var(--text-color);
+}
+
+header h2 {
+  font-size: 1.2rem;
+  font-weight: 400;
+  color: var(--text-muted);
+}
+
+.author-credit {
+  font-size: 1rem;
+  font-style: italic;
+  color: var(--text-muted);
+  margin-top: 0.5rem;
+}
+
+/* ---------------------------------
+Lecture-Specific Styles
+---------------------------------
+*/
+.lecture-text p {
+  font-size: 1.05rem;
+  margin-bottom: 1.5rem;
+  color: #343a40;
+}
+
+.lecture-text h3 {
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: var(--primary-color);
+  margin-top: 2.5rem;
+  margin-bottom: 1rem;
+}
+
+.video-container {
+  margin: 2.5rem 0;
+  border-radius: 12px;
+  overflow: hidden;
+  position: relative;
+  border: 1px solid var(--border-color);
+  box-shadow: 0 4px 12px var(--shadow-color);
+}
+
+.video-container iframe {
+  display: block;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 16 / 9;
+  border: none;
+}
+
+/* ---------------------------------
+Navigation Buttons
+---------------------------------
+*/
+.navigation-buttons {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  align-items: center;
+  margin-top: 3rem;
+  padding-top: 2rem;
+  border-top: 1px solid var(--border-color);
+}
+
+.nav-btn {
+  display: inline-block;
+  background: var(--primary-color);
+  color: #fff;
+  padding: 0.9rem 2.5rem;
+  font-size: 1rem;
+  font-weight: 600;
+  text-decoration: none;
+  border-radius: 8px;
+  transition: all 0.3s ease;
+  border: 1px solid var(--primary-color);
+}
+
+.nav-btn.secondary {
+  background: #e9ecef;
+  border-color: #dee2e6;
+  color: var(--text-color);
+}
+
+.nav-btn:hover {
+  background: var(--primary-hover);
+  border-color: var(--primary-hover);
+  transform: translateY(-2px);
+}
+
+.nav-btn.secondary:hover {
+  background: #ced4da;
+  border-color: #ced4da;
+}
+
+/* ---------------------------------
+Quiz-Specific Styles
+---------------------------------
+*/
+.progress-bar-container {
+  width: 100%;
+  background-color: #e9ecef;
+  border-radius: 10px;
+  margin-top: 1.5rem;
+  height: 10px;
+  border: 1px solid var(--border-color);
+}
+
+.progress-bar {
+  width: 0%;
+  height: 100%;
+  background: var(--primary-color);
+  border-radius: 10px;
+  transition: width 0.5s ease-in-out;
+}
+
+.stats-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 1rem;
+  color: var(--text-muted);
+}
+
+.question-block {
+  margin-bottom: 1.5rem;
+  padding: 1.5rem;
+  background: #fff;
+  border-radius: 12px;
+  border: 1px solid var(--border-color);
+}
+
+.question-block h2 {
+  font-size: 1.2rem;
+  margin-bottom: 1rem;
+  color: var(--text-color);
+  font-weight: 500;
+}
+
+.options-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.options-list li {
+  background-color: #fff;
+  margin: 0.7rem 0;
+  padding: 1rem;
+  border-radius: 8px;
+  border: 1px solid var(--border-color);
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.options-list li:hover {
+  border-color: var(--primary-color);
+  background-color: #e7f1ff;
+}
+
+.options-list li.selected {
+  background-color: var(--primary-color);
+  border-color: var(--primary-color);
+  color: #fff;
+  font-weight: 600;
+}
+
+#submit-btn {
+  display: block;
+  width: 100%;
+  padding: 1rem;
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: #fff;
+  background: var(--correct-color);
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  margin-top: 2rem;
+}
+
+#submit-btn:hover:not(:disabled) {
+  background: #157347;
+}
+
+#submit-btn:disabled {
+  background: #e9ecef;
+  color: var(--text-muted);
+  cursor: not-allowed;
+}
+
+/* ---------------------------------
+Modal (Pop-up) Styles
+---------------------------------
+*/
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(5px);
+  display: none;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+  animation: fadeIn 0.5s;
+}
+
+.modal-content {
+  background: #fff;
+  padding: 2.5rem;
+  border-radius: 16px;
+  border: 1px solid var(--border-color);
+  width: 90%;
+  max-width: 600px;
+  text-align: center;
+  box-shadow: 0 0 40px rgba(0, 0, 0, 0.15);
+}
+
+.modal-content h2 {
+  font-size: 2rem;
+  margin-bottom: 1rem;
+}
+
+#score-percentage {
+  font-size: 4.5rem;
+  font-weight: 700;
+  margin: 1rem 0;
+}
+
+#grade-level {
+  font-size: 1.5rem;
+  font-weight: bold;
+  margin-bottom: 1.5rem;
+}
+
+.grade-pass {
+  color: var(--correct-color);
+}
+.grade-fail {
+  color: var(--incorrect-color);
+}
+
+.modal-buttons {
+  margin-top: 1.5rem;
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.modal-buttons button,
+.modal-buttons a {
+  padding: 0.8rem 1.5rem;
+  border: 1px solid var(--border-color);
+  background: #e9ecef;
+  color: var(--text-color);
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-size: 1rem;
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.modal-buttons button:hover,
+.modal-buttons a:hover {
+  border-color: #b9c3ce;
+  background: #d3d9df;
+}
+
+#next-lecture-btn {
+  background: var(--primary-color);
+  border-color: var(--primary-color);
+  color: #fff;
+  display: none; /* Hidden by default; shown via JS on pass */
+}
+
+#next-lecture-btn:hover {
+  background: var(--primary-hover);
+}
+
+/* ---------------------------------
+Answer Review Section in Modal
+---------------------------------
+*/
+#answer-review {
+  margin-top: 2rem;
+  max-height: 250px;
+  overflow-y: auto;
+  text-align: left;
+  padding: 1rem;
+  background: #f8f9fa;
+  border-radius: 8px;
+  border: 1px solid var(--border-color);
+}
+
+.review-item {
+  padding: 1rem;
+  margin-bottom: 1rem;
+  border-left: 4px solid;
+  background: #fff;
+  border-radius: 8px;
+}
+
+.review-item.correct {
+  border-color: var(--correct-color);
+}
+.review-item.incorrect {
+  border-color: var(--incorrect-color);
+}
+.review-item p {
+  margin: 0.5rem 0;
+}
+.review-item .review-question {
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+}
+.review-item .correct-answer {
+  color: var(--correct-color);
+}
+.review-item .incorrect-answer {
+  color: var(--incorrect-color);
+}
+
+/* ---------------------------------
+Responsive Design
+---------------------------------
+*/
+@media (max-width: 768px) {
+  body {
+    padding: 1rem;
+  }
+  .container {
+    padding: 1.5rem;
+  }
+}
