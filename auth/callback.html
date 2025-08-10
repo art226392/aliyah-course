@@ -1,10 +1,32 @@
-﻿<!doctype html>
+﻿<!DOCTYPE html>
 <html>
-  <body>Finishing sign-in</body>
+  <body>
+    Finishing sign-in
+  </body>
   <script type="module">
-    import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm';
-    const supabase = createClient('https://lesxabpwrsalywlnlpvp.supabase.co', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imxlc3hhYnB3cnNhbHl3bG5scHZwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTQ3NjI3MDIsImV4cCI6MjA3MDMzODcwMn0.VXUIZfsJdnGZW8V5NGkzS-Jykel7wDWqtbKlgYxEJDI');
+    import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm";
+    const supabase = createClient(
+      "https://lesxabpwrsalywlnlpvp.supabase.co",
+      "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imxlc3hhYnB3cnNhbHl3bG5scHZwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTQ3NjI3MDIsImV4cCI6MjA3MDMzODcwMn0.VXUIZfsJdnGZW8V5NGkzS-Jykel7wDWqtbKlgYxEJDI"
+    );
     await supabase.auth.exchangeCodeForSession(window.location.href);
-    location.replace('https://aliyah-course.netlify.app/');
+    location.replace("https://aliyah-course.netlify.app/");
+  </script>
+  <script type="module">
+    import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
+    const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+    supabase.auth.onAuthStateChange(async (event) => {
+      if (event === "PASSWORD_RECOVERY") {
+        const newPassword = prompt("Enter a new password:");
+        if (!newPassword) return;
+        const { error } = await supabase.auth.updateUser({
+          password: newPassword,
+        });
+        if (error) return alert(error.message);
+        alert("Password updated. You can sign in now.");
+        location.href = "/index.html";
+      }
+    });
   </script>
 </html>
