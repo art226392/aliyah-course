@@ -13,24 +13,6 @@
     <link rel="stylesheet" href="style.css" />
   </head>
   <body>
-    <div id="auth" class="auth-panel">
-      <div id="when-signed-out">
-        <input id="email" type="email" placeholder="email" />
-        <input id="password" type="password" placeholder="password" />
-        <button id="signup">Sign up</button>
-        <button id="signin">Sign in</button>
-      </div>
-
-      <div id="when-signed-in" hidden>
-        <span id="whoami">Not signed in</span>
-        <button id="logout">Sign out</button>
-      </div>
-
-      <div id="auth-msg"></div>
-    </div>
-
-    <script type="module" src="/auth/init.js"></script>
-
     <canvas id="bg-canvas"></canvas>
 
     <div class="container">
@@ -148,10 +130,10 @@
           <p>
             May this work stir faith, deepen understanding, and inspire action
             in all who read it. May it contribute to the hastening of that great
-            day when the words of the prophet Isaiah will be fulfilled: “The
+            day when the words of the prophet Isaiah will be fulfilled: "The
             ransomed of the Lord shall return, and come to Zion with singing,
             with everlasting joy on their heads. They shall obtain joy and
-            gladness, and sorrow and sighing shall flee away” (Isaiah 35:10).
+            gladness, and sorrow and sighing shall flee away" (Isaiah 35:10).
           </p>
         </div>
 
@@ -161,179 +143,10 @@
       </main>
     </div>
 
+    <!-- Background animations -->
     <script src="background.js"></script>
 
-    <div
-      id="auth"
-      style="
-        position: fixed;
-        top: 8px;
-        right: 8px;
-        background: #fff5;
-        border: 1px solid #0002;
-        padding: 8px;
-        border-radius: 8px;
-        backdrop-filter: blur(8px);
-      "
-    >
-      <div id="when-signed-out">
-        <input
-          id="email"
-          type="email"
-          placeholder="email"
-          style="margin-right: 4px"
-        />
-        <input
-          id="password"
-          type="password"
-          placeholder="password"
-          style="margin-right: 4px"
-        />
-        <button id="signup">Sign up</button>
-        <button id="signin">Sign in</button>
-      </div>
-      <div id="when-signed-in" hidden>
-        <span id="whoami">Not signed in</span>
-        <button id="logout" style="margin-left: 8px">Sign out</button>
-      </div>
-      <div id="auth-msg" style="color: #b00; margin-top: 6px"></div>
-    </div>
-
-    <script type="module">
-      import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm";
-
-      const supabase = createClient(
-        "https://lesxabpwrsalywlnlpvp.supabase.co",
-        "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imxlc3hhYnB3cnNhbHl3bG5scHZwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTQ3NjI3MDIsImV4cCI6MjA3MDMzODcwMn0.VXUIZfsJdnGZW8V5NGkzS-Jykel7wDWqtbKlgYxEJDI"
-      );
-
-      const el = (id) => document.getElementById(id);
-      const msg = (t) => (el("auth-msg").textContent = t || "");
-
-      async function renderFromSession() {
-        const {
-          data: { session },
-        } = await supabase.auth.getSession();
-        const user = session?.user || null;
-        el("when-signed-in").hidden = !user;
-        el("when-signed-out").hidden = !!user;
-        el("whoami").textContent = user
-          ? `Signed in as ${user.email}`
-          : "Not signed in";
-        msg("");
-      }
-
-      el("signup")?.addEventListener("click", async () => {
-        msg("");
-        try {
-          const email = el("email").value.trim();
-          const password = el("password").value;
-          const { error } = await supabase.auth.signUp({ email, password });
-          if (error) throw error;
-          msg("Check your email if confirmation is required.");
-        } catch (e) {
-          console.error(e);
-          msg(String(e.message || e));
-        }
-      });
-
-      el("signin")?.addEventListener("click", async () => {
-        msg("");
-        try {
-          const email = el("email").value.trim();
-          const password = el("password").value;
-          const { error } = await supabase.auth.signInWithPassword({
-            email,
-            password,
-          });
-          if (error) throw error;
-          await renderFromSession();
-        } catch (e) {
-          console.error(e);
-          msg(String(e.message || e));
-        }
-      });
-
-      el("logout")?.addEventListener("click", async () => {
-        await supabase.auth.signOut();
-        await renderFromSession();
-      });
-
-      supabase.auth.onAuthStateChange((_e, _s) => renderFromSession());
-      renderFromSession();
-
-      // Call this when a quiz finishes
-      export async function saveProgress(lecture, score, passed) {
-        const {
-          data: { user },
-        } = await supabase.auth.getUser();
-        if (!user) throw new Error("Sign in to save progress");
-        const { error } = await supabase.from("quiz_progress").upsert({
-          user_id: user.id,
-          lecture,
-          score,
-          passed,
-          updated_at: new Date().toISOString(),
-        });
-        if (error) throw error;
-      }
-
-      export async function loadMyProgress() {
-        const {
-          data: { user },
-        } = await supabase.auth.getUser();
-        if (!user) return [];
-        const { data, error } = await supabase
-          .from("quiz_progress")
-          .select("*")
-          .order("lecture", { ascending: true });
-        if (error) throw error;
-        return data;
-      }
-    </script>
-    <!-- one-time disclaimer -->
-    <div id="disclaimer" class="modal-backdrop">
-      <div class="modal-card">
-        <h3>Quick note</h3>
-        <p>
-          We strongly recommend watching the full lecture video, not just
-          skimming the text. It makes the quizzes easier and the material
-          actually sticks.
-        </p>
-        <div class="modal-actions">
-          <button id="disclaimer-accept" class="primary">Continue</button>
-        </div>
-      </div>
-    </div>
-
-    <!-- centered auth modal -->
-    <div id="auth-modal" class="modal-backdrop">
-      <div class="modal-card">
-        <h3>Sign in to save your progress</h3>
-        <div id="when-signed-out">
-          <input
-            id="email"
-            type="email"
-            placeholder="Email"
-            style="margin-bottom: 8px"
-          />
-          <input id="password" type="password" placeholder="Password" />
-          <div class="modal-actions">
-            <button id="signup" class="secondary">Sign up</button>
-            <button id="signin" class="primary">Sign in</button>
-          </div>
-        </div>
-        <div id="when-signed-in" hidden>
-          <p id="whoami">Not signed in</p>
-          <div class="modal-actions">
-            <button id="logout" class="secondary">Sign out</button>
-            <button id="auth-close" class="primary">Close</button>
-          </div>
-        </div>
-        <div id="auth-msg"></div>
-      </div>
-    </div>
-
+    <!-- Single auth import - this handles everything -->
     <script type="module" src="/auth/init.js"></script>
   </body>
 </html>
