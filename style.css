@@ -17,9 +17,9 @@ Unified Stylesheet for Aliyah Online Course - Light Theme
   --text-muted: #6b7280;
 
   /* Modern primary palette */
-  --primary-color: #2563eb;        /* Indigo-500 */
-  --primary-hover: #1d4ed8;        /* Indigo-600 */
-  --primary-pressed: #1e40af;      /* Indigo-700 */
+  --primary-color: #2563eb; /* Indigo-500 */
+  --primary-hover: #1d4ed8; /* Indigo-600 */
+  --primary-pressed: #1e40af; /* Indigo-700 */
 
   --correct-color: #10b981;
   --incorrect-color: #ef4444;
@@ -35,9 +35,16 @@ body {
   font-family: "Poppins", sans-serif;
   background-color: var(--bg-color);
   /* Fallback subtle sky gradient under the animated canvas */
-  background-image:
-    radial-gradient(1200px 800px at 20% 0%, var(--bg-accent-1), rgba(255, 255, 255, 0)),
-    radial-gradient(800px 600px at 90% 10%, var(--bg-accent-3), rgba(255, 255, 255, 0)),
+  background-image: radial-gradient(
+      1200px 800px at 20% 0%,
+      var(--bg-accent-1),
+      rgba(255, 255, 255, 0)
+    ),
+    radial-gradient(
+      800px 600px at 90% 10%,
+      var(--bg-accent-3),
+      rgba(255, 255, 255, 0)
+    ),
     linear-gradient(180deg, #f7fbff 0%, #ffffff 100%);
   background-attachment: fixed;
   color: var(--text-color);
@@ -79,8 +86,14 @@ body {
 }
 
 @keyframes fadeIn {
-  from { opacity: 0; transform: translateY(20px) scale(0.98); }
-  to   { opacity: 1; transform: translateY(0) scale(1); }
+  from {
+    opacity: 0;
+    transform: translateY(20px) scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
 }
 
 /* Header & Typography */
@@ -95,7 +108,7 @@ header {
   width: 84px;
   height: auto;
   margin-bottom: 1.25rem;
-  filter: drop-shadow(0 8px 24px rgba(2, 6, 23, 0.10));
+  filter: drop-shadow(0 8px 24px rgba(2, 6, 23, 0.1));
 }
 
 header h1 {
@@ -167,7 +180,11 @@ header h2 {
 .nav-btn {
   display: inline-block;
   position: relative;
-  background: linear-gradient(180deg, var(--btn-grad-start), var(--btn-grad-end));
+  background: linear-gradient(
+    180deg,
+    var(--btn-grad-start),
+    var(--btn-grad-end)
+  );
   color: #fff;
   padding: 0.95rem 2.5rem;
   font-size: 1rem;
@@ -176,8 +193,7 @@ header h2 {
   text-decoration: none;
   border-radius: 9999px;
   border: 0;
-  box-shadow:
-    0 10px 24px var(--btn-glow),
+  box-shadow: 0 10px 24px var(--btn-glow),
     inset 0 1px 0 rgba(255, 255, 255, 0.35);
   transition: transform 0.18s ease, box-shadow 0.18s ease, filter 0.18s ease;
 }
@@ -187,32 +203,36 @@ header h2 {
   position: absolute;
   inset: 0;
   border-radius: inherit;
-  background: linear-gradient(180deg, rgba(255,255,255,0.25), rgba(255,255,255,0));
+  background: linear-gradient(
+    180deg,
+    rgba(255, 255, 255, 0.25),
+    rgba(255, 255, 255, 0)
+  );
   pointer-events: none;
 }
 
 .nav-btn:hover {
   transform: translateY(-1px) scale(1.01);
   transform: translateY(-2px);
-  box-shadow:
-    0 14px 32px var(--btn-glow),
+  box-shadow: 0 14px 32px var(--btn-glow),
     inset 0 1px 0 rgba(255, 255, 255, 0.45);
   filter: saturate(1.05);
 }
 
 .nav-btn:active {
   transform: translateY(0);
-  box-shadow:
-    0 8px 18px var(--btn-glow),
+  box-shadow: 0 8px 18px var(--btn-glow),
     inset 0 1px 0 rgba(255, 255, 255, 0.35);
-  background: linear-gradient(180deg, var(--primary-hover), var(--primary-pressed));
+  background: linear-gradient(
+    180deg,
+    var(--primary-hover),
+    var(--primary-pressed)
+  );
 }
 
 .nav-btn:focus-visible {
   outline: none;
-  box-shadow:
-    0 0 0 4px rgba(37, 99, 235, 0.12),
-    0 10px 24px var(--btn-glow),
+  box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.12), 0 10px 24px var(--btn-glow),
     inset 0 1px 0 rgba(255, 255, 255, 0.35);
 }
 
@@ -221,7 +241,8 @@ header h2 {
   background: rgba(255, 255, 255, 0.7);
   color: var(--text-color);
   border: 1px solid rgba(2, 6, 23, 0.08);
-  box-shadow: 0 8px 18px rgba(2, 6, 23, 0.06), inset 0 1px 0 rgba(255,255,255,0.6);
+  box-shadow: 0 8px 18px rgba(2, 6, 23, 0.06),
+    inset 0 1px 0 rgba(255, 255, 255, 0.6);
 }
 
 .nav-btn.secondary:hover {
@@ -242,7 +263,11 @@ header h2 {
 .progress-bar {
   width: 0%;
   height: 100%;
-  background: linear-gradient(90deg, var(--btn-grad-start), var(--btn-grad-end));
+  background: linear-gradient(
+    90deg,
+    var(--btn-grad-start),
+    var(--btn-grad-end)
+  );
   border-radius: 12px;
   transition: width 0.5s ease-in-out;
 }
@@ -284,7 +309,8 @@ header h2 {
   border-radius: 12px;
   border: 1px solid var(--border-color);
   cursor: pointer;
-  transition: transform 0.18s ease, box-shadow 0.18s ease, border-color 0.18s ease, background 0.18s ease;
+  transition: transform 0.18s ease, box-shadow 0.18s ease,
+    border-color 0.18s ease, background 0.18s ease;
 }
 
 .options-list li:hover {
@@ -296,9 +322,13 @@ header h2 {
 
 .options-list li.selected {
   color: #fff;
-  background: linear-gradient(180deg, var(--btn-grad-start), var(--btn-grad-end));
+  background: linear-gradient(
+    180deg,
+    var(--btn-grad-start),
+    var(--btn-grad-end)
+  );
   border-color: transparent;
-  box-shadow: inset 0 1px 0 rgba(255,255,255,0.4);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.4);
   font-weight: 700;
 }
 
@@ -315,7 +345,8 @@ header h2 {
   cursor: pointer;
   transition: transform 0.18s ease, box-shadow 0.18s ease;
   margin-top: 2rem;
-  box-shadow: 0 12px 28px rgba(34, 197, 94, 0.25), inset 0 1px 0 rgba(255,255,255,0.35);
+  box-shadow: 0 12px 28px rgba(34, 197, 94, 0.25),
+    inset 0 1px 0 rgba(255, 255, 255, 0.35);
 }
 
 #submit-btn:hover:not(:disabled) {
@@ -372,8 +403,13 @@ header h2 {
   margin-bottom: 1.25rem;
 }
 
-.grade-pass { color: var(--correct-color); }
-.grade-fail { color: #d97706; font-weight: 600; }
+.grade-pass {
+  color: var(--correct-color);
+}
+.grade-fail {
+  color: #d97706;
+  font-weight: 600;
+}
 
 .modal-buttons {
   margin-top: 1.5rem;
@@ -387,7 +423,7 @@ header h2 {
 .modal-buttons a {
   padding: 0.85rem 1.4rem;
   border: 1px solid var(--border-color);
-  background: rgba(255,255,255,0.8);
+  background: rgba(255, 255, 255, 0.8);
   color: var(--text-color);
   border-radius: 9999px;
   cursor: pointer;
@@ -405,7 +441,11 @@ header h2 {
 }
 
 #next-lecture-btn {
-  background: linear-gradient(180deg, var(--btn-grad-start), var(--btn-grad-end));
+  background: linear-gradient(
+    180deg,
+    var(--btn-grad-start),
+    var(--btn-grad-end)
+  );
   border-color: transparent;
   color: #fff;
   display: none; /* Shown via JS on pass */
@@ -431,20 +471,36 @@ header h2 {
   border-radius: 12px;
 }
 
-.review-item.correct { border-color: var(--correct-color); }
-.review-item.incorrect { border-color: var(--incorrect-color); }
+.review-item.correct {
+  border-color: var(--correct-color);
+}
+.review-item.incorrect {
+  border-color: var(--incorrect-color);
+}
 
-.review-item p { margin: 0.5rem 0; }
-.review-item .review-question { font-weight: 700; margin-bottom: 0.5rem; }
-.review-item .correct-answer { color: var(--correct-color); }
-.review-item .incorrect-answer { color: var(--incorrect-color); }
+.review-item p {
+  margin: 0.5rem 0;
+}
+.review-item .review-question {
+  font-weight: 700;
+  margin-bottom: 0.5rem;
+}
+.review-item .correct-answer {
+  color: var(--correct-color);
+}
+.review-item .incorrect-answer {
+  color: var(--incorrect-color);
+}
 
 /* Responsive */
 @media (max-width: 768px) {
-  body { padding: 1rem; }
-  .container { padding: 1.5rem; }
+  body {
+    padding: 1rem;
+  }
+  .container {
+    padding: 1.5rem;
+  }
 }
-
 
 /* Softer fail message text */
 .modal-fail-message {
@@ -453,14 +509,12 @@ header h2 {
   margin-top: 0.5rem;
 }
 
-
 /* Friendlier feedback tone */
 #feedback-text {
   color: var(--text-muted);
   font-size: 1.05rem;
   margin-top: 0.5rem;
 }
-
 
 /* Improved focus ring */
 :where(a, button, input, select, textarea):focus-visible {
@@ -469,13 +523,129 @@ header h2 {
   border-radius: 10px;
 }
 
-
 /* Subtle container backdrop */
 .container::before {
   content: "";
   position: fixed;
   inset: 0;
-  background: radial-gradient(1000px 700px at 10% 80%, rgba(255,255,255,0.5), rgba(255,255,255,0));
+  background: radial-gradient(
+    1000px 700px at 10% 80%,
+    rgba(255, 255, 255, 0.5),
+    rgba(255, 255, 255, 0)
+  );
   pointer-events: none;
   z-index: 0;
+}
+
+/* Auth panel */
+.auth-panel {
+  position: fixed;
+  top: 12px;
+  right: 12px;
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-wrap: wrap;
+  padding: 10px 12px;
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.95);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+  font-size: 14px;
+}
+#auth input {
+  height: 32px;
+  padding: 0 8px;
+  border: 1px solid #d0d5dd;
+  border-radius: 6px;
+}
+#auth button {
+  height: 32px;
+  padding: 0 10px;
+  border-radius: 6px;
+  border: 1px solid #cbd5e1;
+  background: #fff;
+  cursor: pointer;
+}
+#auth button[disabled] {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+#auth #auth-msg {
+  width: 100%;
+  color: #b00;
+  margin-top: 4px;
+  font-size: 12px;
+}
+@media (max-width: 640px) {
+  .auth-panel {
+    left: 12px;
+    right: 12px;
+  }
+  #auth input {
+    flex: 1 1 140px;
+  }
+}
+/* Modals */
+.modal-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.55);
+  display: none;
+  align-items: center;
+  justify-content: center;
+  z-index: 10000;
+}
+.modal-backdrop[open] {
+  display: flex;
+}
+.modal-card {
+  background: #fff;
+  border-radius: 14px;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.25);
+  max-width: 560px;
+  width: 92%;
+  padding: 20px 22px;
+}
+.modal-actions {
+  display: flex;
+  gap: 10px;
+  justify-content: flex-end;
+  margin-top: 14px;
+}
+.modal-card h3 {
+  margin: 0 0 6px 0;
+  font-size: 20px;
+}
+.modal-card p {
+  margin: 0 0 8px 0;
+  font-size: 14px;
+  line-height: 1.6;
+}
+.modal-card input {
+  width: 100%;
+  height: 36px;
+  border: 1px solid #d0d5dd;
+  border-radius: 8px;
+  padding: 0 10px;
+}
+.modal-card button {
+  height: 36px;
+  padding: 0 12px;
+  border-radius: 8px;
+  border: 1px solid #cbd5e1;
+  background: #0f766e;
+  color: #fff;
+  cursor: pointer;
+}
+.modal-card button.secondary {
+  background: #fff;
+  color: #0f172a;
+  border: 1px solid #cbd5e1;
+}
+#auth-msg {
+  color: #b00;
+  font-size: 12px;
+  margin-top: 6px;
 }

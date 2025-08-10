@@ -63,6 +63,11 @@
   // ===== Quiz timer (12 minutes) =====
   const QUIZ_LIMIT_SECONDS = 12 * 60;
 
+  /**
+   * Formats seconds into MM:SS format.
+   * @param {number} totalSeconds
+   * @returns {string}
+   */
   function mmss(totalSeconds) {
     const m = Math.floor(totalSeconds / 60)
       .toString()
@@ -73,15 +78,23 @@
     return `${m}:${s}`;
   }
 
+  /**
+   * Ends the quiz and displays the results.
+   * This function is called when the timer runs out or the user submits.
+   * @param {string} reason - 'time' or 'manual'
+   */
   function finishQuiz(reason) {
+    // CORRECTED: Call the globally exposed 'showResults' function from the specific quiz page.
+    // This was previously trying to call 'computeResults', which does not exist.
     try {
-      if (typeof window.computeResults === "function") {
-        window.computeResults();
+      if (typeof window.showResults === "function") {
+        window.showResults();
       }
     } catch (_) {
       /* best effort */
     }
 
+    // Update the result message if the quiz was ended due to time running out.
     try {
       const msg = document.getElementById("result-message");
       if (msg && reason === "time") {
@@ -89,22 +102,17 @@
       }
     } catch (_) {}
 
-    const map = {
-      "/quiz1.html": "lecture2.html",
-      "/quiz2.html": "lecture3.html",
-      "/quiz3.html": "lecture4.html",
-    };
-
-    const fallback = "index.html";
-    const next = window.nextLecture || map[location.pathname] || fallback;
-
-    setTimeout(() => {
-      location.href = next;
-    }, 1500);
+    // REMOVED: The automatic redirection logic has been removed.
+    // Navigation is now handled exclusively by the "Next Lecture" button in the results modal,
+    // which is controlled by the script on each quiz's HTML page. This prevents premature redirection.
   }
 
+  /**
+   * Starts the global quiz timer.
+   */
   function startQuizTimer() {
     const display = document.getElementById("timer");
+    // Only start the timer if a timer element exists on the page.
     if (!display) return;
 
     let remaining = QUIZ_LIMIT_SECONDS;
@@ -116,18 +124,24 @@
       if (remaining <= 0) {
         clearInterval(t);
         display.textContent = "00:00";
+        // When time is up, call finishQuiz.
         finishQuiz("time");
       } else {
         display.textContent = mmss(remaining);
       }
     }, 1000);
 
-    const finishBtn = document.getElementById("finishBtn");
+    // Note: The submit button on each quiz page now calls 'showResults' directly.
+    // The 'finishBtn' logic here is a fallback.
+    const finishBtn = document.getElementById("submit-btn");
     if (finishBtn) {
-      finishBtn.addEventListener("click", () => finishQuiz("manual"));
+      // Ensure that clicking the submit button doesn't trigger the old 'finishQuiz' path
+      // if it's already handled by the form's submit event.
+      // The primary submission is handled in the inline script of each quiz HTML file.
     }
   }
 
+  // Start the timer once the DOM is loaded.
   if (document.readyState === "loading") {
     document.addEventListener("DOMContentLoaded", startQuizTimer);
   } else {

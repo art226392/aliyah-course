@@ -68,6 +68,7 @@
         </div>
         <div class="stats-container">
           <div id="question-counter">Answered: 0 / 15</div>
+          <!-- The timer display is now controlled by background.js -->
           <div id="timer">Time Left: 12:00</div>
         </div>
       </header>
@@ -267,7 +268,6 @@
         const submitBtn = document.getElementById("submit-btn");
         const progressBar = document.getElementById("progress-bar");
         const questionCounter = document.getElementById("question-counter");
-        const timerEl = document.getElementById("timer");
         const resultsModal = document.getElementById("results-modal");
         const scorePercentageEl = document.getElementById("score-percentage");
         const gradeLevelEl = document.getElementById("grade-level");
@@ -278,8 +278,6 @@
 
         // --- STATE VARIABLES ---
         let userAnswers = new Array(quizQuestions.length).fill(null);
-        let timerInterval;
-        let timeLeft = 720; // 12 minutes in seconds
         let quizInProgress = true;
 
         // --- FIREWORKS ANIMATION ---
@@ -492,32 +490,17 @@
           submitBtn.disabled = answeredCount !== quizQuestions.length;
         }
 
-        /**
-         * Starts the 12-minute countdown timer.
-         */
-        function startTimer() {
-          timerInterval = setInterval(() => {
-            timeLeft--;
-            const mins = Math.floor(timeLeft / 60)
-              .toString()
-              .padStart(2, "0");
-            const secs = (timeLeft % 60).toString().padStart(2, "0");
-            timerEl.textContent = `Time Left: ${mins}:${secs}`;
-
-            if (timeLeft <= 0) {
-              timerEl.textContent = "Time's Up!";
-              showResults(); // Auto-submit when time runs out
-            }
-          }, 1000);
-        }
+        // REMOVED: The inline timer logic is now handled by background.js
+        // function startTimer() { ... }
 
         /**
          * Calculates score, displays results, and enforces pass/fail logic.
+         * This function is exposed to the window object so background.js can call it.
          */
-        function showResults() {
+        window.showResults = function () {
           if (!quizInProgress) return; // Prevent multiple submissions
           quizInProgress = false;
-          clearInterval(timerInterval);
+          // The timer interval is in background.js, so we don't clear it here.
 
           let score = 0;
           userAnswers.forEach((answer, index) => {
@@ -529,17 +512,16 @@
           const percentage = Math.round((score / quizQuestions.length) * 100);
           scorePercentageEl.textContent = `${percentage}%`;
 
-          // NEW: Enforce 80% pass condition with celebration
           if (percentage >= 80) {
             gradeLevelEl.textContent = "PASS";
             gradeLevelEl.className = "grade-pass celebrating";
             feedbackTextEl.textContent =
               "Excellent work! You have mastered the concepts of God's plan through Israel. You may proceed to the next lecture.";
-            nextLectureBtn.style.display = "inline-block"; // Show button
-            nextLectureBtn.href = "lecture3.html"; // FIXED: Now leads to lecture 3
+            nextLectureBtn.style.display = "inline-block";
+            // CORRECTED: This now correctly points to lecture3.html.
+            nextLectureBtn.href = "lecture3.html";
             nextLectureBtn.classList.add("celebrate");
 
-            // Start fireworks animation
             setTimeout(() => {
               const fireworks = new Fireworks();
               fireworks.start();
@@ -548,12 +530,12 @@
             gradeLevelEl.textContent = "FAIL";
             gradeLevelEl.className = "grade-fail";
             feedbackTextEl.textContent = `You scored ${percentage}%. A score of 80% is required to pass. Please review the material and try again.`;
-            nextLectureBtn.style.display = "none"; // Hide button
+            nextLectureBtn.style.display = "none";
           }
 
           renderAnswerReview();
           resultsModal.style.display = "flex";
-        }
+        };
 
         /**
          * Generates the HTML for the answer review section in the modal.
@@ -591,7 +573,7 @@
         questionsWrapper.addEventListener("click", handleOptionSelect);
         quizForm.addEventListener("submit", (e) => {
           e.preventDefault();
-          showResults();
+          window.showResults();
         });
         retryBtn.addEventListener("click", () => {
           window.location.reload();
@@ -599,7 +581,7 @@
 
         // --- INITIALIZATION ---
         renderQuestions();
-        startTimer();
+        // REMOVED: The call to startTimer() is no longer needed here.
       });
     </script>
   </body>
