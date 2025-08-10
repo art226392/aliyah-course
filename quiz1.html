@@ -99,7 +99,19 @@
       </div>
     </div>
 
-    <script>
+    <!-- Import Auth Module FIRST -->
+    <script type="module" src="/auth/init.js"></script>
+
+    <script type="module">
+      // Wait for auth to initialize
+      await new Promise((resolve) => {
+        if (window.AliyahAuth) {
+          resolve();
+        } else {
+          window.addEventListener("authStateChanged", resolve, { once: true });
+        }
+      });
+
       document.addEventListener("DOMContentLoaded", () => {
         // --- QUIZ DATA - STRICTLY FROM LECTURE 1 ONLY ---
         const quizQuestions = [
@@ -276,7 +288,7 @@
         // --- STATE VARIABLES ---
         let userAnswers = new Array(quizQuestions.length).fill(null);
         let timerInterval;
-        let timeLeft = 600; // 12 minutes in seconds
+        let timeLeft = 480; // 8 minutes in seconds
         let quizInProgress = true;
 
         // --- FIREWORKS ANIMATION ---
@@ -509,9 +521,9 @@
         }
 
         /**
-         * Calculates score, displays results, and enforces pass/fail logic.
+         * Calculates score, displays results, and saves to Supabase.
          */
-        function showResults() {
+        async function showResults() {
           if (!quizInProgress) return; // Prevent multiple submissions
           quizInProgress = false;
           clearInterval(timerInterval);
@@ -526,14 +538,25 @@
           const percentage = Math.round((score / quizQuestions.length) * 100);
           scorePercentageEl.textContent = `${percentage}%`;
 
-          // NEW: Enforce 80% pass condition with celebration
-          if (percentage >= 80) {
+          // Save progress to Supabase
+          const passed = percentage >= 80;
+
+          // Try to save to Supabase
+          if (window.AliyahAuth && window.AliyahAuth.saveQuizProgress) {
+            try {
+              await window.AliyahAuth.saveQuizProgress(1, percentage, passed);
+            } catch (error) {
+              console.error("Failed to save quiz progress:", error);
+            }
+          }
+
+          if (passed) {
             gradeLevelEl.textContent = "PASS";
             gradeLevelEl.className = "grade-pass celebrating";
             feedbackTextEl.textContent =
               "Excellent! You have a strong understanding of the material. You may proceed to the next lecture.";
-            nextLectureBtn.style.display = "inline-block"; // Show button
-            nextLectureBtn.href = "lecture2.html"; // Set link
+            nextLectureBtn.style.display = "inline-block";
+            nextLectureBtn.href = "lecture2.html";
             nextLectureBtn.classList.add("celebrate");
 
             // Start fireworks animation
@@ -545,7 +568,7 @@
             gradeLevelEl.textContent = "FAIL";
             gradeLevelEl.className = "grade-fail";
             feedbackTextEl.textContent = `You scored ${percentage}%. A score of 80% is required to pass. Please review the material and try again.`;
-            nextLectureBtn.style.display = "none"; // Hide button
+            nextLectureBtn.style.display = "none";
           }
 
           renderAnswerReview();
@@ -599,6 +622,5 @@
         startTimer();
       });
     </script>
-    <script src="./progress.js" defer></script>
   </body>
 </html>
